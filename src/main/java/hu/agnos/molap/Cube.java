@@ -246,7 +246,7 @@ public class Cube implements java.io.Serializable {
      */
     public void refreshHeader() {
         this.measureHeader = this.measures.getHeader();
-        this.hierarchyHeader = this.generateHierarchiesnHeader();
+        this.hierarchyHeader = this.generateHierarchiesHeader();
     }
 
     /**
@@ -255,10 +255,10 @@ public class Cube implements java.io.Serializable {
      *
      * @return A hierarchia neveket tartalmazó, köttött sorendű tömb
      */
-    private String[] generateHierarchiesnHeader() {
+    private String[] generateHierarchiesHeader() {
         int hierarchyCnt = 0;
-        for (int i = 0; i < this.dimensions.size(); i++) {
-            hierarchyCnt += this.dimensions.get(i).getHierarchyCnt();
+        for (Dimension dimension : this.dimensions) {
+            hierarchyCnt += dimension.getHierarchyCnt();
         }
 
         String[] hierarchiesHeader = new String[hierarchyCnt];

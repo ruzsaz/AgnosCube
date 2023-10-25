@@ -2,7 +2,10 @@ package hu.agnos.molap.dimension;
 
 import java.io.Serial;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -20,45 +23,35 @@ public class Dimension implements java.io.Serializable {
 
     @Serial
     private static final long serialVersionUID = -8940196742313994740L;
-
-    /**
-     * A dimenzió szintek tára
-     */
+    private final String name;
     private final List<Level> levels;
+    private Node[][] nodes; // Dimension values by levels. First index is the level, second is the index of the node (dimension value).
+    private final boolean isOfflineCalculated;  // True if the dimension is offline calculated in the cube
+    private transient Map<String, Node> lookupTable;
 
-    /**
-     * A dimenzió szintek konkrét előfordulásia, a legfinomabb granuralitási
-     * szintű elemek kivételével
-     */
-    private Node[][] nodes;
-
-    /**
-     * A dimenzió egyedi neve
-     */
-    private final String dimensionUniqueName;
-
-//    /**
-//     * A dimenzió szintjeinek száma (+ 1 az All level)
-//     */
-//    private int levelCount;
-
-    /**
-     * Ezen diemenzió szerint partícionálva van-e a kocka
-     */
-    private final boolean isOfflineCalculated;
-
-    /**
-     * A hierarchy konstruktora
-     *
-     * @param dimensionUniqueName a hierarchia kocka szinten egyedi neve
-     * @param isOfflineCalculated a hierarchia particionált-e
-     */
-    public Dimension(String dimensionUniqueName, boolean isOfflineCalculated) {
+    public Dimension(String name, boolean isOfflineCalculated) {
         this.levels = new ArrayList<>();
         Level root = new Level(0, "All");
         this.levels.add(root);
-        this.dimensionUniqueName = dimensionUniqueName;
+        this.name = name;
         this.isOfflineCalculated = isOfflineCalculated;
+    }
+
+    public void initLookupTable() {
+        this.lookupTable = new HashMap<>();
+        addSelfAndAllChildrenToLookupTable("", nodes[0][0], 0);
+    }
+
+    private void addSelfAndAllChildrenToLookupTable(String parentKey, Node node, int nodeLevel) {
+        String selfKey = (parentKey.isEmpty()) ? node.getCode() : parentKey + "," + node.getCode();
+        lookupTable.put(selfKey, node);
+        if (! node.isLeaf()) {
+            int[] childrenIds = node.getChildrenId();
+            for (int childId : childrenIds) {
+                Node childNode = nodes[nodeLevel + 1][childId];
+                addSelfAndAllChildrenToLookupTable(selfKey, childNode, nodeLevel + 1);
+            }
+        }
     }
 
     /**
@@ -71,7 +64,6 @@ public class Dimension implements java.io.Serializable {
         this.nodes[0] = new Node[]{root};
     }
 
-    
     /**
      * Visszaadja a Root csomópontot
      *
@@ -240,7 +232,7 @@ public class Dimension implements java.io.Serializable {
      * kiírja a hierarchia főbb adatait
      */
     public void printer() {
-        System.out.println(this.dimensionUniqueName);
+        System.out.println(this.name);
         for (Node[] node : nodes) {
             for (int j = 0; j < node.length; j++) {
                 for (int c = 0; c < j; c++) {

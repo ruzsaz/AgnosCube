@@ -1,4 +1,4 @@
-package hu.agnos.molap.measure;
+package hu.agnos.cube.measure;
 
 /**
  * Ez az interface a mutatók egységes kezelésére szolgál, szerepe, hogy mind a

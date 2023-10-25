@@ -2,7 +2,7 @@
  * Itt tárolodnak a measure értékek.
  *  A tömb első indexe a measure oszlop indexe, míg a 2. index megmodja, hogy hányadik sor kell
  */
-package hu.agnos.molap.measure;
+package hu.agnos.cube.measure;
 
 import java.io.Serial;
 

@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package hu.agnos.molap;
+package hu.agnos.cube;
 
-import hu.agnos.molap.dimension.Dimension;
-import hu.agnos.molap.measure.Cells;
-import hu.agnos.molap.measure.Measures;
+import hu.agnos.cube.dimension.Dimension;
+import hu.agnos.cube.measure.Cells;
+import hu.agnos.cube.measure.Measures;
 
 import java.io.Serial;
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class Cube implements java.io.Serializable {
      *
      * @param idx az új dimenzió listabéli indexe
      * @param dimension a beszúrandó dimenzió
-     * @see hu.agnos.molap.dimension.Dimension
+     * @see hu.agnos.cube.dimension.Dimension
      */
     public void addDimension(int idx, Dimension dimension) {
         this.dimensions.add(idx, dimension);

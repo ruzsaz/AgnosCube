@@ -1,4 +1,4 @@
-package hu.agnos.molap.dimension;
+package hu.agnos.cube.dimension;
 
 import java.io.Serial;
 import java.util.ArrayList;
@@ -68,7 +68,7 @@ public class Dimension implements java.io.Serializable {
      * Visszaadja a Root csomópontot
      *
      * @return Root csomópont
-     * @see hu.agnos.molap.dimension.Node
+     * @see hu.agnos.cube.dimension.Node
      */
     public Node getRoot() {
         return this.nodes[0][0];
@@ -79,7 +79,7 @@ public class Dimension implements java.io.Serializable {
      *
      * @param depth a beszúrás hierarchia-szintje
      * @param nodeRow a beszúrandó csomópontok vektora
-     * @see hu.agnos.molap.dimension.Node
+     * @see hu.agnos.cube.dimension.Node
      */
     public void setNodes(int depth, Node[] nodeRow) {
         this.nodes[depth] = nodeRow;
@@ -91,7 +91,7 @@ public class Dimension implements java.io.Serializable {
      * @param depth a keresett hierarchia-szint
      * @param id a keresett csomópont hierarchia-szintbéli sorszáma
      * @return a keresett csomópont
-     * @see hu.agnos.molap.dimension.Node
+     * @see hu.agnos.cube.dimension.Node
      */
     public Node getNode(int depth, int id) {
         return this.nodes[depth][id];
@@ -127,7 +127,7 @@ public class Dimension implements java.io.Serializable {
      * A megfelelő index-re beszúrja a paraméterül kapott Level-et
      *
      * @param entity a beszúrandó Level
-     * @see hu.agnos.molap.dimension.Level
+     * @see hu.agnos.cube.dimension.Level
      */
     public void addLevel(Level entity) {
         int idx = getInsertIdxOfNewLevel(entity);
@@ -145,7 +145,7 @@ public class Dimension implements java.io.Serializable {
      *
      * @param entity a beszúrandó Level
      * @return az új elem beszúrásának indexe
-     * @see hu.agnos.molap.dimension.Level
+     * @see hu.agnos.cube.dimension.Level
      */
     private int getInsertIdxOfNewLevel(Level entity) {
         int result = -1;
@@ -168,7 +168,7 @@ public class Dimension implements java.io.Serializable {
      *
      * @param levelName A keresett Level neve
      * @return true ha tartalmaz ilyen nevű levelet, ellenben false
-     * @see hu.agnos.molap.dimension.Level
+     * @see hu.agnos.cube.dimension.Level
      */
     public boolean hasLevel(String levelName) {
         boolean result = false;
@@ -188,7 +188,7 @@ public class Dimension implements java.io.Serializable {
      * @param path a DrillVector egy része (":" szeparált részegység )
      * @return a megcímzett elem / node /member, vagy null, ha a path nem valós
      * elemet címez
-     * @see hu.agnos.molap.dimension.Node
+     * @see hu.agnos.cube.dimension.Node
      */
     public Node getNode(String path) {
         Node result;

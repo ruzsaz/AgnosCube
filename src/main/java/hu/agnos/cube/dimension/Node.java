@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package hu.agnos.molap.dimension;
+package hu.agnos.cube.dimension;
 
 import java.io.Serial;
 

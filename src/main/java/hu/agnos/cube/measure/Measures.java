@@ -1,4 +1,4 @@
-package hu.agnos.molap.measure;
+package hu.agnos.cube.measure;
 
 import java.io.Serial;
 import java.util.ArrayList;

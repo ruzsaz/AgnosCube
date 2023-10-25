@@ -12,7 +12,7 @@ package hu.agnos.molap.dimension;
  * osztálytól eltérően, ez már nem a struktúrát írja le (Megye kistérség
  * település), hanem e struktúrában lévő elemeket (pl. Hajdú-Bihar vagy
  * Berettyóújfalu). Metaadat a csomopont azonosítója, kódja és neve, még egyéb
- * informéció a csomópont által érintett intervallumok alsó és felső indexei, a
+ * információ a csomópont által érintett intervallumok alsó és felső indexei, a
  * csomopont szülei és a gyerekei.
  *
  * @author parisek
@@ -37,9 +37,8 @@ public class Node implements java.io.Serializable {
     private final String name;
 
     /**
-     * A node-érték szöveges formálya. Azért célszerű ezt letárolni, mert ez
-     * off-line időben meghatározható, és így a lekérdezési idő szignifikánsan
-     * csökkenthető.
+     * A node-érték szöveges formája. Azért célszerű ezt letárolni, mert ez
+     * off-line időben meghatározható, és így a lekérdezési idő csökkenthető.
      */
     private final String dataAsString;
 
@@ -185,6 +184,11 @@ public class Node implements java.io.Serializable {
      */
     public String getDataAsString() {
         return dataAsString;
+    }
+
+    // TODO: a dataAsString helyett DimValue-t csinálni, de ahhoz az összes kockát újra kell gyártani
+    public DimValue getDataAsDimValue() {
+        return new DimValue(code, code, name);
     }
 
     /**

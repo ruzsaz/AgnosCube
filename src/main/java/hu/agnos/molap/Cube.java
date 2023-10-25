@@ -44,7 +44,7 @@ public class Cube implements java.io.Serializable {
     /**
      * Ez a hiearachia sorszámához (amely a hierarchyHeader-ből tudható meg),
      * megmondja, hogy az hányadik dimenzió, hányadik hierarchia eleme. Ez egy
-     * mátrix, amelynek fejléce az alábbi: sorszáma, dimenzióIdx, hierarchiaIdx
+     * mátrix, amelynek fejléce az alábbi: hierarchia sorszáma, dimenzióIdx, hierarchiaIdx
      */
     private int[][] hierarchyIndex;
 
@@ -160,10 +160,10 @@ public class Cube implements java.io.Serializable {
     }
 
     /**
-     * Visszaadja az adott nevű hierrchiához tartozó dimenzió és hierarchia
+     * Visszaadja az adott nevű hierarchiához tartozó dimenzió és hierarchia
      * indexeket egy kételemű vektorban.
      *
-     * @param hierarchyUniquename hierarchie egyedi neve
+     * @param hierarchyUniquename hierarchia egyedi neve
      * @return {dimenzioIdx, hierarcyIdx}
      */
     public int[] getHierarchyInfoByHeader(String hierarchyUniquename) {

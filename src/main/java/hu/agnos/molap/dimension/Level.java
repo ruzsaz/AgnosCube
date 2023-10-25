@@ -24,7 +24,7 @@ public class Level implements java.io.Serializable {
     private final String name;
     
     /**
-     * A sznthez tartozó azonosítót tartalamzó oszlop neve, szerepe a
+     * A szinthez tartozó azonosítót tartalamzó oszlop neve, szerepe a
      * cube-ról készült reportnál jelentkezik
      */
     private final String idColumnName;

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package hu.agnos.molap.dimension;
 
 import java.util.ArrayList;
@@ -93,7 +88,7 @@ public class Hierarchy implements java.io.Serializable {
     /**
      * Az adott hierarchia-szintre beszúrja akapott csomopontok vektorát
      *
-     * @param depth a beszúrás hjerarchia-szintja
+     * @param depth a beszúrás hierarchia-szintje
      * @param nodeRow a beszúrandó csomópontok vektora
      * @see hu.agnos.molap.dimension.Node
      */
@@ -110,11 +105,23 @@ public class Hierarchy implements java.io.Serializable {
      * @see hu.agnos.molap.dimension.Node
      */
     public Node getNode(int depth, int id) {
-//        System.out.println("hierName: "+this.hierarchyUniqueName);
-//        System.out.println("node length: " + this.nodes.length);
-//        System.out.println("depth: "+depth+", id: "+id);
-
         return this.nodes[depth][id];
+    }
+
+    /**
+     * Find a node on a given level by its code (known id).
+     *
+     * @param depth Depth to look for the code
+     * @param code Code to look for
+     * @return The selected node, or null if not exists
+     */
+    public Node getNodeByKnownId(int depth, String code) {
+        for (Node n : this.nodes[depth]) {
+            if (n.getCode().equals(code)) {
+                return n;
+            }
+        }
+        return null;
     }
 
     /**
@@ -208,7 +215,7 @@ public class Hierarchy implements java.io.Serializable {
     }
 
     /**
-     * Visszaadja, hogy a paraméteréül kapott névvelmegegyező Level-et
+     * Visszaadja, hogy a paraméteréül kapott névvel megegyező Level-t
      * tartalmazza-e.
      *
      * @param levelName A keresett Level neve

@@ -165,6 +165,33 @@ public class Dimension implements java.io.Serializable {
 
     }
 
+    // TODO: kiszervezni egy előre legyártott hashmap-be
+    public Node getNodeByKnowIdPath(int hierarchyIdx, String path) {
+        Hierarchy hier = this.hierarchies[hierarchyIdx];
+        String[] levelIds = path.split(",");
+
+        if (levelIds[0].isEmpty()) {
+            return hier.getRoot();
+        } else {
+            int queryLength = levelIds.length;
+
+            // a path utolsó indexe a kereset elem knownId-ja
+            String knownId = levelIds[queryLength - 1];
+
+            if (hier.getMaxDepth() == queryLength) { // Ha a legfinomabb granularitási szinten vagyunk
+                for (Node n : baseLevelNodes) {
+                    if (n.getCode().equals(knownId)) {
+                        return n;
+                    }
+                }
+                return null; // Nincs találat
+            } else if (hier.getMaxDepth() > queryLength) { // Ha közbülső szinten vagyunk
+                return hier.getNodeByKnownId(queryLength, knownId);
+            }
+            return null;
+        }
+    }
+
     /**
      * Visszaadja a dimenzión belüli hierarchiák számát.
      *

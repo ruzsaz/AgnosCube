@@ -60,7 +60,7 @@ public class Dimension implements java.io.Serializable {
      */
     public void initNodeArray(int levelCount) {
         this.nodes = new Node[levelCount][];
-        Node root = new Node(0, "All", "All");
+        Node root = new Node(0, "", "All", 0);
         this.nodes[0] = new Node[]{root};
     }
 
@@ -97,20 +97,10 @@ public class Dimension implements java.io.Serializable {
         return this.nodes[depth][id];
     }
 
-    /**
-     * Find a node on a given level by its code (known id).
-     *
-     * @param depth Depth to look for the code
-     * @param code Code to look for
-     * @return The selected node, or null if not exists
-     */
-    public Node getNodeByKnownId(int depth, String code) {
-        for (Node n : this.nodes[depth]) {
-            if (n.getCode().equals(code)) {
-                return n;
-            }
-        }
-        return null;
+
+
+    public Node getNodeByKnownIdPath(String path) {
+        return lookupTable.get(path);
     }
 
     /**
@@ -191,41 +181,23 @@ public class Dimension implements java.io.Serializable {
      * @see hu.agnos.cube.dimension.Node
      */
     public Node getNode(String path) {
-        Node result;
         String[] levelIds = path.split(",");
-
         if (levelIds[0].isEmpty()) {
-            result = getRoot();
-        } else {
-            int queryLength = levelIds.length;
-
-            // a path utolsó indexe a kereset elem id-ja
-            int idx = Integer.parseInt(levelIds[queryLength - 1]);
-
-            result = getNode(queryLength, idx);
+            return(getRoot());
         }
-
-        return result;
-
+        int queryLength = levelIds.length;
+        int idx = Integer.parseInt(levelIds[queryLength - 1]);
+        return(getNode(levelIds.length, idx));
     }
 
-    // TODO: kiszervezni egy előre legyártott hashmap-be
-    public Node getNodeByKnowIdPath(String path) {
-        String[] levelIds = path.split(",");
-
-        if (levelIds[0].isEmpty()) {
-            return getRoot();
-        } else {
-            int queryLength = levelIds.length;
-
-            // a path utolsó indexe a kereset elem knownId-ja
-            String knownId = levelIds[queryLength - 1];
-
-            if (this.levels.size() >= queryLength) { 
-                return getNodeByKnownId(queryLength, knownId);
-            }
-            return null;
+    public Node[] getChildrenOf(Node node) {
+        Node[] children = new Node[node.getChildrenId().length];
+        int nodeLevel = node.getLevel();
+        for (int i = 0; i < node.getChildrenId().length; i++) {
+            int childId = node.getChildrenId()[i];
+            children[i] = getNode(nodeLevel + 1, childId);
         }
+        return children;
     }
 
     /**

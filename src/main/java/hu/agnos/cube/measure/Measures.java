@@ -32,11 +32,10 @@ public class Measures implements java.io.Serializable {
     }
 
     /**
-     * Ez egy nem kalkulált measure nevéből, visszaadja, a cells tömben lévő
-     * oszlopsorszámát.
+     * Determines the index of a non-calculated measure within the cells.
      *
-     * @param name a keresendő measure neve
-     * @return az őt reprezentáló cells béli oszlop sorszáma
+     * @param name Name of the measure
+     * @return Index of the measure within the cells
      */
     public int getRealMeasureIdxByName(String name) {
         int i = 0;

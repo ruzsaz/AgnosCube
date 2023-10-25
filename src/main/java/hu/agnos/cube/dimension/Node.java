@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package hu.agnos.cube.dimension;
 
 import java.io.Serial;
@@ -72,6 +67,8 @@ public class Node implements java.io.Serializable {
      */
     private int[] childrenId;
 
+    private int level;
+
     /**
      * A Node konstruktora.
      *
@@ -79,10 +76,11 @@ public class Node implements java.io.Serializable {
      * @param code a csomópont kódja
      * @param name a csomópont neve
      */
-    public Node(Integer id, String code, String name) {
+    public Node(Integer id, String code, String name, int level) {
         this.id = id;
         this.code = code;
         this.name = name;
+        this.level = level;
         StringBuilder sb = new StringBuilder();
         sb.append("{\"id\":\"").append(id);
         sb.append("\",\"knownId\":\"").append(code);
@@ -106,8 +104,8 @@ public class Node implements java.io.Serializable {
      * @param parentId a csomópont szülöjének azonosítója
      * @param childrenId a csomópont gyerekeinek azonosítóit tartalmazó vektor
      */
-    public Node(Integer id, String code, String name, int[] lowerIndexes, int[] upperIndexes, int parentId, int[] childrenId) {
-        this(id, code, name);
+    public Node(Integer id, String code, String name, int level, int[] lowerIndexes, int[] upperIndexes, int parentId, int[] childrenId) {
+        this(id, code, name, level);
         this.intervalsLowerIndexes = lowerIndexes;
         this.intervalsUpperIndexes = upperIndexes;
         this.parentId = parentId;
@@ -136,5 +134,4 @@ public class Node implements java.io.Serializable {
             System.out.println(this.intervalsUpperIndexes[i]);
         }
     }
-
 }

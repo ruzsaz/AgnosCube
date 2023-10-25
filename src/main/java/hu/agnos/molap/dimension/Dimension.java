@@ -1,95 +1,186 @@
 package hu.agnos.molap.dimension;
 
+import java.util.ArrayList;
+import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 /**
- * Ez az osztály egy kockán belüli dimenziót reprezentál (pl.: Idő). Egy
- * dimenzió több hierarchiát is tartalmazhat (pl. üzleti év, gregorián, stb)
+ * Ez az osztály egy adott dimenzió írja le . Tartalma egyrész meta-adat (levels), másrészt
+ * tényleges adat(nodes).
  *
  * @author parisek
  */
+@Getter
+@Setter
+@ToString
 public class Dimension implements java.io.Serializable {
 
     private static final long serialVersionUID = -8940196742313994740L;
 
     /**
-     * A dimenzió kockán belüli egyedi neve
+     * A dimenzió szintek tára
      */
-    private final String uniqueName;
+    private final List<Level> levels;
 
     /**
-     * mivel egy dimenzióban egynél több hierarchia is lehet, így a
-     * hierarchiákat tömben tároljuk
+     * A dimenzió szintek konkrét előfordulásia, a legfinomabb granuralitási
+     * szintű elemek kivételével
      */
-    private final Hierarchy[] hierarchies;
+    private Node[][] nodes;
 
     /**
-     * a dimenzióban lévő hierarchiák száma
+     * A dimenzió egyedi neve
      */
-    private final int hierarchyCnt;
+    private final String dimensionUniqueName;
+
+//    /**
+//     * A dimenzió szintjeinek száma (+ 1 az All level)
+//     */
+//    private int levelCount;
 
     /**
-     * a dimenzió azon nodjainak tömbje, amelyek a dimenzió legfinomabb
-     * granuralitási szintjét reprezentálják. Mivel az egy dimenzióban szereplő
-     * külömböző hierarchiáknak legfinomabb granuralitási szinten meg kell
-     * egyezniük, így ezeket felesleges lenne többször tárolni
+     * Ezen diemenzió szerint partícionálva van-e a kocka
      */
-    private Node[] baseLevelNodes;
+    private final boolean isOfflineCalculated;
 
     /**
-     * A dimenzió konstruktora.
+     * A hierarchy konstruktora
      *
-     * @param uniqueName a dimenzió kockán belüli egyedi neve
-     * @param hierarchyCnt a dimenzióban található hierarchiák száma
-     * @see hu.agnos.molap.dimension.Hierarchy
+     * @param dimensionUniqueName a hierarchia kocka szinten egyedi neve
+     * @param isOfflineCalculated a hierarchia particionált-e
      */
-    public Dimension(String uniqueName, int hierarchyCnt) {
-        this.hierarchyCnt = hierarchyCnt;
-        this.hierarchies = new Hierarchy[hierarchyCnt];
-        this.uniqueName = uniqueName;
+    public Dimension(String dimensionUniqueName, boolean isOfflineCalculated) {
+        this.levels = new ArrayList<>();
+        Level root = new Level(0, "All");
+        this.levels.add(root);
+        this.dimensionUniqueName = dimensionUniqueName;
+        this.isOfflineCalculated = isOfflineCalculated;
     }
 
     /**
-     * A paraméteréül kapott hierarchiát beszúrja a megadott index-re
-     *
-     * @param hierarchyIdx a beszúrás helye
-     * @param hier a beszúrandó hierarchia
-     * @see hu.agnos.molap.dimension.Hierarchy
+     * A Node-okat tartalmazo vektor inicializálásáa, legelső eleme a Root (0,
+     * "All", "All")
      */
-    public void addHierarchy(int hierarchyIdx, Hierarchy hier) {
-        this.hierarchies[hierarchyIdx] = hier;
+    public void initNodeArray(int levelCount) {
+        this.nodes = new Node[levelCount][];
+        Node root = new Node(0, "All", "All");
+        this.nodes[0] = new Node[]{root};
+    }
+
+    
+    /**
+     * Visszaadja a Root csomópontot
+     *
+     * @return Root csomópont
+     * @see hu.agnos.molap.dimension.Node
+     */
+    public Node getRoot() {
+        return this.nodes[0][0];
     }
 
     /**
-     * Visszaadja a dimenzió kockán belüli egyedi nevét
+     * Az adott hierarchia-szintre beszúrja akapott csomopontok vektorát
      *
-     * @return a dimenzió egyedi neve
+     * @param depth a beszúrás hierarchia-szintje
+     * @param nodeRow a beszúrandó csomópontok vektora
+     * @see hu.agnos.molap.dimension.Node
      */
-    public String getUniqueName() {
-        return uniqueName;
+    public void setNodes(int depth, Node[] nodeRow) {
+        this.nodes[depth] = nodeRow;
     }
 
     /**
-     * Visszaadja az adott indexen szereplű hierarchiát
+     * Visszaadja egy adott hierarchiaszint adott indexű csomópontját
      *
-     * @param hierarchyIdx a keresett hierarchia indexe
-     * @return a keresett hierarchia
-     * @see hu.agnos.molap.dimension.Hierarchy
+     * @param depth a keresett hierarchia-szint
+     * @param id a keresett csomópont hierarchia-szintbéli sorszáma
+     * @return a keresett csomópont
+     * @see hu.agnos.molap.dimension.Node
      */
-    public Hierarchy getHierarchyById(int hierarchyIdx) {
-        return this.hierarchies[hierarchyIdx];
+    public Node getNode(int depth, int id) {
+        return this.nodes[depth][id];
     }
 
     /**
-     * Visszaadja a keresett hierarchiát annak neve alapján
+     * Find a node on a given level by its code (known id).
      *
-     * @param hierarchyUniqeName a keresett hierarchia neve
-     * @return a keresett hierarchia, ha nem tartalmaz ilyet, akkor null
-     * @see hu.agnos.molap.dimension.Hierarchy
+     * @param depth Depth to look for the code
+     * @param code Code to look for
+     * @return The selected node, or null if not exists
      */
-    public Hierarchy getHierarchyByUniqueName(String hierarchyUniqeName) {
-        Hierarchy result = null;
-        for (Hierarchy h : this.hierarchies) {
-            if (h.getHierarchyUniqueName().equals(hierarchyUniqeName)) {
-                result = h;
+    public Node getNodeByKnownId(int depth, String code) {
+        for (Node n : this.nodes[depth]) {
+            if (n.getCode().equals(code)) {
+                return n;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Visszaadja a hierarchia maximális mélységét
+     *
+     * @return maximális mélység
+     */
+    public int getLevelCount() {
+        return this.levels.size();
+    }
+
+    
+    /**
+     * A megfelelő index-re beszúrja a paraméterül kapott Level-et
+     *
+     * @param entity a beszúrandó Level
+     * @see hu.agnos.molap.dimension.Level
+     */
+    public void addLevel(Level entity) {
+        int idx = getInsertIdxOfNewLevel(entity);
+        if (idx == this.levels.size()) {
+            this.levels.add(entity);
+        } else {
+            this.levels.add(idx, entity);
+        }
+
+    }
+
+    /**
+     * Ez visszaadja az új elem beszúrási indexét. Ezt arra használjuk, hogy a
+     * hierarchiában a szintek rendezetten tárolódhassanak.
+     *
+     * @param entity a beszúrandó Level
+     * @return az új elem beszúrásának indexe
+     * @see hu.agnos.molap.dimension.Level
+     */
+    private int getInsertIdxOfNewLevel(Level entity) {
+        int result = -1;
+        for (int i = 0; i < this.levels.size(); i++) {
+            if (this.levels.get(i).getDepth() > entity.getDepth()) {
+                result = i;
+                break;
+            }
+        }
+        if (result == -1) {
+            result = this.levels.size();
+        }
+        return result;
+    }
+
+    
+    /**
+     * Visszaadja, hogy a paraméteréül kapott névvel megegyező Level-t
+     * tartalmazza-e.
+     *
+     * @param levelName A keresett Level neve
+     * @return true ha tartalmaz ilyen nevű levelet, ellenben false
+     * @see hu.agnos.molap.dimension.Level
+     */
+    public boolean hasLevel(String levelName) {
+        boolean result = false;
+        for (Level level : this.levels) {
+            if (level.getName().equals(levelName)) {
+                result = true;
                 break;
             }
         }
@@ -97,68 +188,27 @@ public class Dimension implements java.io.Serializable {
     }
 
     /**
-     * Visszaadja a tartalmazott hierarchiák vektorát
-     *
-     * @return a tartalmazott hierarchiák vektora
-     * @see hu.agnos.molap.dimension.Hierarchy
-     */
-    public Hierarchy[] getHierarchies() {
-        return hierarchies;
-    }
-
-    /**
-     * Visszaadja a legfinomabb granularitási szinten található csomópontok
-     * vektorát. Az egy dimenzión belüli hierarchiák legfinomabb granularitási
-     * szintjét reprezentáló csomópontok minden hierarchiában azonosak (pl. az
-     * Idő dimenzió esetén a napok), így azokat csak egyszer a dimenzión belül
-     * tároljuk, nem a hierarchiákban.
-     *
-     * @return a legfinomabb granularitási szinten lévő csomópontok vektora
-     * @see hu.agnos.molap.dimension.Node
-     */
-    public Node[] getBaseLevelNodes() {
-        return baseLevelNodes;
-    }
-
-    /**
-     * Beállítja a paraméteréül kapott legfinomabb granularitási szinten
-     * található csomópontok vektorát
-     *
-     * @param baseLevelNodes a beállítandó csomópontok vektora
-     * @see hu.agnos.molap.dimension.Node
-     */
-    public void setBaseLevelNodes(Node[] baseLevelNodes) {
-        this.baseLevelNodes = baseLevelNodes;
-    }
-
-    /**
      * Visszaadja a megcímzett csomópontot. A címzés a hierarchiaindex és egy
      * "baseVector" szegmenssel történik.
      *
-     * @param hierarchyIdx a dimenzión belüli hierarchia sorszáma
      * @param path a DrillVector egy része (":" szeparált részegység )
      * @return a megcímzett elem / node /member, vagy null, ha a path nem valós
      * elemet címez
      * @see hu.agnos.molap.dimension.Node
      */
-    public Node getNode(int hierarchyIdx, String path) {
+    public Node getNode(String path) {
         Node result = null;
-        Hierarchy hier = this.hierarchies[hierarchyIdx];
         String[] levelIds = path.split(",");
 
         if (levelIds[0].isEmpty()) {
-            result = hier.getRoot();
+            result = getRoot();
         } else {
             int queryLength = levelIds.length;
 
             // a path utolsó indexe a kereset elem id-ja
             int idx = Integer.parseInt(levelIds[queryLength - 1]);
 
-            if (hier.getMaxDepth() == queryLength) {
-                result = baseLevelNodes[idx];
-            } else {
-                result = hier.getNode(queryLength, idx);
-            }
+            result = getNode(queryLength, idx);
         }
 
         return result;
@@ -166,52 +216,37 @@ public class Dimension implements java.io.Serializable {
     }
 
     // TODO: kiszervezni egy előre legyártott hashmap-be
-    public Node getNodeByKnowIdPath(int hierarchyIdx, String path) {
-        Hierarchy hier = this.hierarchies[hierarchyIdx];
+    public Node getNodeByKnowIdPath(String path) {
         String[] levelIds = path.split(",");
 
         if (levelIds[0].isEmpty()) {
-            return hier.getRoot();
+            return getRoot();
         } else {
             int queryLength = levelIds.length;
 
             // a path utolsó indexe a kereset elem knownId-ja
             String knownId = levelIds[queryLength - 1];
 
-            if (hier.getMaxDepth() == queryLength) { // Ha a legfinomabb granularitási szinten vagyunk
-                for (Node n : baseLevelNodes) {
-                    if (n.getCode().equals(knownId)) {
-                        return n;
-                    }
-                }
-                return null; // Nincs találat
-            } else if (hier.getMaxDepth() > queryLength) { // Ha közbülső szinten vagyunk
-                return hier.getNodeByKnownId(queryLength, knownId);
+            if (this.levels.size() >= queryLength) { 
+                return getNodeByKnownId(queryLength, knownId);
             }
             return null;
         }
     }
 
     /**
-     * Visszaadja a dimenzión belüli hierarchiák számát.
-     *
-     * @return a hierarchiák száma
-     */
-    public int getHierarchyCnt() {
-        return hierarchyCnt;
-    }
-
-    /**
-     * Kiírja a dimenzió főbb adatait
+     * kiírja a hierarchia főbb adatait
      */
     public void printer() {
-        for (int i = 0; i < hierarchies.length; i++) {
-            hierarchies[i].printer();
-        }
+        System.out.println(this.dimensionUniqueName);
+        for (int i = 0; i < nodes.length; i++) {
+            for (int j = 0; j < nodes[i].length; j++) {
+                for (int c = 0; c < j; c++) {
+                    System.out.print("\t");
+                }
+                System.out.println(nodes[i][j]);
+            }
 
-        System.out.println("Base level:");
-        for (int i = 0; i < baseLevelNodes.length; i++) {
-            System.out.println(baseLevelNodes[i]);
         }
     }
 

@@ -5,10 +5,19 @@
  */
 package hu.agnos.molap.measure;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 /**
  *
  * @author parisek
  */
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
 public class CalculatedMeasure implements java.io.Serializable, AbstractMeasure {
 
     private static final long serialVersionUID = -8940196742313994740L;
@@ -28,49 +37,6 @@ public class CalculatedMeasure implements java.io.Serializable, AbstractMeasure 
      */
     String formula;
 
-    public CalculatedMeasure(String name, String formula) {
-        this.name = name;
-        this.formula = formula;
-    }
-
-    /**
-     * {@link CalculatedMeasure#name}
-     * @return a measure egyedi neve
-     */
-    @Override
-    public String getName() {
-        return name;
-    }
-
-     /**
-     * {@link CalculatedMeasure#name}
-     * @param name measure egyedi neve
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-     /**
-     * {@link CalculatedMeasure#formula}
-     * @return A measure értékének kiszámításához használt formula
-     */
-    public String getFormula() {
-        return formula;
-    }
-
-    /**
-     * {@link CalculatedMeasure#formula}
-     * @param formula A measure értékének kiszámításához használt formula
-     */
-    public void setFormula(String formula) {
-        this.formula = formula;
-    }
-
-    @Override
-    public String toString() {
-        return name;
-    }
-
     /**
      *
      * @return mindig igaz
@@ -79,5 +45,4 @@ public class CalculatedMeasure implements java.io.Serializable, AbstractMeasure 
     public boolean isCalculatedMember() {
         return true;
     }
-
 }

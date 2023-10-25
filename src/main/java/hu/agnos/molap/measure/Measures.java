@@ -7,6 +7,7 @@ package hu.agnos.molap.measure;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
 
 /**
  * Measures a cube osztályban szereplő mutatók metaadatainak tára, amely egy
@@ -14,6 +15,7 @@ import java.util.List;
  *
  * @author parisek
  */
+@Getter
 public class Measures implements java.io.Serializable {
 
     private static final long serialVersionUID = -8940196742313994740L;
@@ -30,14 +32,6 @@ public class Measures implements java.io.Serializable {
         this.measures = new ArrayList<>();
     }
 
-    /**
-     * Visszaadja a tárolt mutatók metáját
-     *
-     * @return a measure-öket tartalamzó tömb
-     */
-    public List<AbstractMeasure> getMeasures() {
-        return measures;
-    }
 
     /**
      * Visszaadja a mutatók számát

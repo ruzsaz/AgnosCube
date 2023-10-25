@@ -5,6 +5,8 @@
  */
 package hu.agnos.molap.dimension;
 
+import java.io.Serial;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,6 +22,7 @@ import lombok.ToString;
 @ToString
 public class Level implements java.io.Serializable {
 
+    @Serial
     private static final long serialVersionUID = -8940196742313994740L;
     
     /**

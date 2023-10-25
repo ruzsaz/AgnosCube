@@ -1,8 +1,10 @@
 /*
  * Itt tárolodnak a measure értékek.
- *  A tömb első indexe a mesaser oszlop indexe, míg a 2. index megmodja, hogy hányadik sor kell
+ *  A tömb első indexe a measure oszlop indexe, míg a 2. index megmodja, hogy hányadik sor kell
  */
 package hu.agnos.molap.measure;
+
+import java.io.Serial;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,19 +23,20 @@ import lombok.ToString;
 @ToString
 public class Cells implements java.io.Serializable {
 
+    @Serial
     private static final long serialVersionUID = -8940196742313994740L;
 
     /**
-     * A tartalmazott mutatok tömbje. Első index a mutatók száma, míg a második
-     * index a mutatók sorainak száma.
+     * A tartalmazott mutatok tömbje. Első index a mutató sorszáma, a második
+     * a mutatón belüli sorszám.
      */
     float[][] cells;
 
     /**
      * A Cells konstruktora
      *
-     * @param columnCnt a tartalmazott mutatók száma
-     * @param rowCnt a tartalmazott mutatok sorainak száma
+     * @param columnCnt a mutatók száma
+     * @param rowCnt a mutatók sorainak száma
      */
     public Cells(int columnCnt, int rowCnt) {
         this.cells = new float[columnCnt][rowCnt];

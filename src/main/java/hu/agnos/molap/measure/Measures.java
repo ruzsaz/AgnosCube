@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package hu.agnos.molap.measure;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -18,28 +14,12 @@ import lombok.Getter;
 @Getter
 public class Measures implements java.io.Serializable {
 
+    @Serial
     private static final long serialVersionUID = -8940196742313994740L;
-
-    /**
-     * A measure-ök listája, elemei kalkulált és nem kalkulát measure-ök.
-     */
     private final List<AbstractMeasure> measures;
 
-    /**
-     * A Measures konstruktora
-     */
     public Measures() {
         this.measures = new ArrayList<>();
-    }
-
-
-    /**
-     * Visszaadja a mutatók számát
-     *
-     * @return a measure száma
-     */
-    public int getMemberCount() {
-        return measures.size();
     }
 
     /**
@@ -55,13 +35,13 @@ public class Measures implements java.io.Serializable {
      * Ez egy nem kalkulált measure nevéből, visszaadja, a cells tömben lévő
      * oszlopsorszámát.
      *
-     * @param uniqeName a keresendő measure neve
+     * @param name a keresendő measure neve
      * @return az őt reprezentáló cells béli oszlop sorszáma
      */
-    public int getRealMeasureIdxByUniquName(String uniqeName) {
+    public int getRealMeasureIdxByName(String name) {
         int i = 0;
         for (AbstractMeasure member : this.measures) {
-            if (member.getName().equals(uniqeName)) {
+            if (member.getName().equals(name)) {
                 return i;
             }
             if (!member.isCalculatedMember()) {
@@ -84,17 +64,6 @@ public class Measures implements java.io.Serializable {
             }
         }
         return result;
-    }
-
-    /**
-     * Visszaad egy konkrét mutatót metáját
-     *
-     * @param idx a konkrét mutató kockabéli sorsáma
-     * @return a kívánt mutató
-     * @throws IndexOutOfBoundsException ha az IDX értéke nagyobb a measures vektor méreténél
-     */
-    public AbstractMeasure getMember(int idx) throws IndexOutOfBoundsException {
-        return measures.get(idx);
     }
 
     /**

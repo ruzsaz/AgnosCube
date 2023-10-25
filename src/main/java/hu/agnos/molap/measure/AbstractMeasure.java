@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package hu.agnos.molap.measure;
 
 /**
@@ -17,12 +12,12 @@ public interface AbstractMeasure {
      * Visszaadja a mutató kockán belüli egyedi nevét
      * @return a mutató egyedi neve
      */
-    public abstract String getName();
+    String getName();
 
     /**
      * Megadja, hogy a mutató kalkulált vagy ténylegesen tárolt mutató-e
      * @return true ha a mutató kalkulált, ellenben false
      */
-    public abstract boolean isCalculatedMember();
+    boolean isCalculatedMember();
 
 }

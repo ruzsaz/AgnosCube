@@ -1,5 +1,6 @@
 package hu.agnos.molap.dimension;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -17,6 +18,7 @@ import lombok.ToString;
 @ToString
 public class Dimension implements java.io.Serializable {
 
+    @Serial
     private static final long serialVersionUID = -8940196742313994740L;
 
     /**
@@ -197,7 +199,7 @@ public class Dimension implements java.io.Serializable {
      * @see hu.agnos.molap.dimension.Node
      */
     public Node getNode(String path) {
-        Node result = null;
+        Node result;
         String[] levelIds = path.split(",");
 
         if (levelIds[0].isEmpty()) {
@@ -239,12 +241,12 @@ public class Dimension implements java.io.Serializable {
      */
     public void printer() {
         System.out.println(this.dimensionUniqueName);
-        for (int i = 0; i < nodes.length; i++) {
-            for (int j = 0; j < nodes[i].length; j++) {
+        for (Node[] node : nodes) {
+            for (int j = 0; j < node.length; j++) {
                 for (int c = 0; c < j; c++) {
                     System.out.print("\t");
                 }
-                System.out.println(nodes[i][j]);
+                System.out.println(node[j]);
             }
 
         }

@@ -5,6 +5,8 @@
  */
 package hu.agnos.molap.dimension;
 
+import java.io.Serial;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -26,6 +28,7 @@ import lombok.ToString;
 @ToString
 public class Node implements java.io.Serializable {
 
+    @Serial
     private static final long serialVersionUID = -8940196742313994740L;
 
     /**
@@ -118,10 +121,7 @@ public class Node implements java.io.Serializable {
      * @return igyaz ha levélelem, különben hamis
      */
     public boolean isLeaf() {
-        if (this.childrenId == null) {
-            return true;
-        }
-        return !(this.childrenId.length > 0);
+        return (this.childrenId == null || this.childrenId.length == 0);
     }
 
 
@@ -134,7 +134,6 @@ public class Node implements java.io.Serializable {
         for (int i = 0; i < this.intervalsLowerIndexes.length; i++) {
             System.out.print(this.intervalsLowerIndexes[i] + " - ");
             System.out.println(this.intervalsUpperIndexes[i]);
-
         }
     }
 

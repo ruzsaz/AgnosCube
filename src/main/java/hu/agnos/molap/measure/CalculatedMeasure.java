@@ -1,9 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package hu.agnos.molap.measure;
+
+import java.io.Serial;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +17,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class CalculatedMeasure implements java.io.Serializable, AbstractMeasure {
 
+    @Serial
     private static final long serialVersionUID = -8940196742313994740L;
     
     /**

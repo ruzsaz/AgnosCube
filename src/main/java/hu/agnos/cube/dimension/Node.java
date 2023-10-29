@@ -26,26 +26,10 @@ public class Node implements java.io.Serializable {
     @Serial
     private static final long serialVersionUID = -8940196742313994740L;
 
-    /**
-     * A node érték azonosítója.
-     */
-    private final Integer id;
-
-    /**
-     * A node érték kódja.
-     */
-    private final String code;
-
-    /**
-     * A node érték neve.
-     */
-    private final String name;
-
-    /**
-     * A node-érték szöveges formája. Azért célszerű ezt letárolni, mert ez
-     * off-line időben meghatározható, és így a lekérdezési idő csökkenthető.
-     */    
-    private transient String dataAsString;
+    private final Integer id;   // Id, unique within the level only, auto-created
+    private String code;  // Known id, or business id of the element, as read from the database; must be unique within the level
+    private final String name;  // Name to show in the reports
+    private transient String dataAsString;  // id+code+name, as a json string, just for faster lookups
 
     /**
      * A node által érintett Kockabéli intervallumok alsó indexei
@@ -111,7 +95,6 @@ public class Node implements java.io.Serializable {
         this.parentId = parentId;
         this.childrenId = childrenId;
     }
-
 
     /**
      * Megmodnja, hogy a csomópont levélelem-e a hierarchián belül vagy sem

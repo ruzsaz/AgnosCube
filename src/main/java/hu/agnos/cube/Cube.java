@@ -45,6 +45,25 @@ public class Cube implements java.io.Serializable {
         this.createdDate = new Date();
     }
 
+    public void init() {
+        refreshDimensionHeader();
+        refreshMeasureHeader();
+        dimensions.forEach(d -> d.getNode(0,0));
+        dimensions.forEach(Dimension::initLookupTable);
+    }
+
+    private void refreshDimensionHeader() {
+        int dimensionNumber = dimensions.size();
+        this.dimensionHeader = new String[dimensionNumber];
+        for (int i = 0; i < dimensionNumber; i++) {
+            this.dimensionHeader[i] = dimensions.get(i).getName();
+        }
+    }
+
+    private void refreshMeasureHeader() {
+        this.measureHeader = measures.getHeader();
+    }
+
     /**
      * Beszúr egy dimenziót a dimenziók listájába
      *

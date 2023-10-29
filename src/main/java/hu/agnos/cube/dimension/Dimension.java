@@ -11,10 +11,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * Ez az osztály egy adott dimenzió írja le . Tartalma egyrész meta-adat (levels), másrészt
- * tényleges adat(nodes).
- *
- * @author parisek
+ * Describes a dimension in the cube. It contains some meta-info about the dimension, the levels, and
+ * all the dimension values (called nodes) as an array of elements in every level.
  */
 @Getter
 @Setter
@@ -38,12 +36,17 @@ public class Dimension implements java.io.Serializable {
     }
 
     public void initLookupTable() {
+        resetRootNode();
         this.lookupTable = new HashMap<>();
-        addSelfAndAllChildrenToLookupTable("", nodes[0][0], 0);
+        addSelfAndAllChildrenToLookupTable(null, nodes[0][0], 0);
+    }
+
+    public void resetRootNode() {
+        nodes[0][0].setCode("");
     }
 
     private void addSelfAndAllChildrenToLookupTable(String parentKey, Node node, int nodeLevel) {
-        String selfKey = (parentKey.isEmpty()) ? node.getCode() : parentKey + "," + node.getCode();
+        String selfKey = (parentKey == null || parentKey.isEmpty()) ? node.getCode() : parentKey + "," + node.getCode();
         lookupTable.put(selfKey, node);
         if (! node.isLeaf()) {
             int[] childrenIds = node.getChildrenId();
@@ -52,16 +55,6 @@ public class Dimension implements java.io.Serializable {
                 addSelfAndAllChildrenToLookupTable(selfKey, childNode, nodeLevel + 1);
             }
         }
-    }
-
-    /**
-     * A Node-okat tartalmazo vektor inicializálásáa, legelső eleme a Root (0,
-     * "All", "All")
-     */
-    public void initNodeArray(int levelCount) {
-        this.nodes = new Node[levelCount][];
-        Node root = new Node(0, "", "All", 0);
-        this.nodes[0] = new Node[]{root};
     }
 
     /**
@@ -96,8 +89,6 @@ public class Dimension implements java.io.Serializable {
     public Node getNode(int depth, int id) {
         return this.nodes[depth][id];
     }
-
-
 
     public Node getNodeByKnownIdPath(String path) {
         return lookupTable.get(path);
@@ -181,7 +172,7 @@ public class Dimension implements java.io.Serializable {
      * @see hu.agnos.cube.dimension.Node
      */
     public Node getNode(String path) {
-        String[] levelIds = path.split(",");
+        String[] levelIds = path.split(",", -1);
         if (levelIds[0].isEmpty()) {
             return(getRoot());
         }
@@ -200,19 +191,21 @@ public class Dimension implements java.io.Serializable {
         return children;
     }
 
-    /**
-     * kiírja a hierarchia főbb adatait
-     */
-    public void printer() {
+    public void printForDebug() {
         System.out.println(this.name);
+        System.out.println("Nodes: ");
         for (Node[] node : nodes) {
-            for (int j = 0; j < node.length; j++) {
-                for (int c = 0; c < j; c++) {
+            for (Node value : node) {
+                for (int c = 0; c < value.getLevel(); c++) {
                     System.out.print("\t");
                 }
-                System.out.println(node[j]);
+                System.out.println(value);
             }
+        }
 
+        System.out.println("LookupTable:");
+        for (Map.Entry<String, Node> e : lookupTable.entrySet()) {
+            System.out.println("    '" + e.getKey() + "' -> Node " + e.getValue().getCode() + ":" + e.getValue().getName());
         }
     }
 

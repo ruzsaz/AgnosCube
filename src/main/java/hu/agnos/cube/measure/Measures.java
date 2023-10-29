@@ -84,7 +84,7 @@ public class Measures implements java.io.Serializable {
     public String[] getHeader() {
         String[] result = new String[this.measures.size()];
         for (int i = 0; i < this.measures.size(); i++) {
-            result[i] = this.measures.get(i).toString();
+            result[i] = this.measures.get(i).getName();
         }
         return result;
     }

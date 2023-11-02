@@ -35,16 +35,31 @@ public class Dimension implements java.io.Serializable {
         this.isOfflineCalculated = isOfflineCalculated;
     }
 
+    /**
+     * Initializes the lookup table, to make drill-path to node
+     * conversion faster. Should be run once, right after the cube is loaded.
+     */
     public void initLookupTable() {
         resetRootNode();
         this.lookupTable = new HashMap<>();
         addSelfAndAllChildrenToLookupTable(null, nodes[0][0], 0);
     }
 
-    public void resetRootNode() {
+    /**
+     * Sets the root node's code to "" as required. Should be run once,
+     * after the cube is loaded, to be sure the root node's code is as required.
+     */
+    private void resetRootNode() {
         nodes[0][0].setCode("");
     }
 
+    /**
+     * Recursive method to insert a node, and all children to the lookup table.
+     *
+     * @param parentKey The node's parent key, like "2013,06"
+     * @param node The node to insert with all its children
+     * @param nodeLevel The node's level (0: root, etc...)
+     */
     private void addSelfAndAllChildrenToLookupTable(String parentKey, Node node, int nodeLevel) {
         String selfKey = (parentKey == null || parentKey.isEmpty()) ? node.getCode() : parentKey + "," + node.getCode();
         lookupTable.put(selfKey, node);
@@ -57,12 +72,6 @@ public class Dimension implements java.io.Serializable {
         }
     }
 
-    /**
-     * Visszaadja a Root csomópontot
-     *
-     * @return Root csomópont
-     * @see hu.agnos.cube.dimension.Node
-     */
     public Node getRoot() {
         return this.nodes[0][0];
     }
@@ -97,10 +106,10 @@ public class Dimension implements java.io.Serializable {
     /**
      * Visszaadja a hierarchia maximális mélységét
      *
-     * @return maximális mélység
+     * @return maximális mélység, 0: root level, stb...
      */
-    public int getLevelCount() {
-        return this.levels.size();
+    public int getMaxDepth() {
+        return this.levels.size() - 1;
     }
 
     

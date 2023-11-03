@@ -1,20 +1,19 @@
 package hu.agnos.cube.dimension;
 
-import java.io.Serial;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serial;
+
 /**
- * Ez az osztály egy Level osztály adott csomopontját reprezentálja. Nem konkrét
- * értékeket, hanem metaadatokat és az adott csomopont konkrét értékének
- * meghatározásához szükséges információkat tárolunk itt. Viszont a Level
- * osztálytól eltérően, ez már nem a struktúrát írja le (Megye kistérség
- * település), hanem e struktúrában lévő elemeket (pl. Hajdú-Bihar vagy
- * Berettyóújfalu). Metaadat a csomopont azonosítója, kódja és neve, még egyéb
- * információ a csomópont által érintett intervallumok alsó és felső indexei, a
- * csomopont szülei és a gyerekei.
+ * Ez az osztály egy Level osztály adott csomopontját reprezentálja. Nem konkrét értékeket, hanem metaadatokat és az
+ * adott csomopont konkrét értékének meghatározásához szükséges információkat tárolunk itt. Viszont a Level osztálytól
+ * eltérően, ez már nem a struktúrát írja le (Megye kistérség település), hanem e struktúrában lévő elemeket (pl.
+ * Hajdú-Bihar vagy Berettyóújfalu). Metaadat a csomopont azonosítója, kódja és neve, még egyéb információ a csomópont
+ * által érintett intervallumok alsó és felső indexei, a csomopont szülei és a gyerekei.
  *
  * @author parisek
  */
@@ -27,8 +26,8 @@ public class Node implements java.io.Serializable {
     private static final long serialVersionUID = -8940196742313994740L;
 
     private final Integer id;   // Id, unique within the level only, auto-created
-    private String code;  // Known id, or business id of the element, as read from the database; must be unique within the level
     private final String name;  // Name to show in the reports
+    private String code;  // Known id, or business id of the element, as read from the database; must be unique within the level
     private transient String dataAsString;  // id+code+name, as a json string, just for faster lookups
 
     /**
@@ -44,12 +43,8 @@ public class Node implements java.io.Serializable {
     /**
      * a szülő node azonosítója
      */
-    private int parentId;
-
-    /**
-     * a gyerek node-ok azonosítói
-     */
-    private int[] childrenId;
+    private int parentId;       // Id of the node's parent
+    private int[] childrenId;   // Ids of the node's children
 
     private int level;
 
@@ -65,26 +60,18 @@ public class Node implements java.io.Serializable {
         this.code = code;
         this.name = name;
         this.level = level;
-        StringBuilder sb = new StringBuilder();
-        sb.append("{\"id\":\"").append(id);
-        sb.append("\",\"knownId\":\"").append(code);
-        sb.append("\",\"name\":\"").append(name).append("\"}");
-        this.dataAsString = sb.toString();
         this.intervalsUpperIndexes = null;
         this.childrenId = null;
     }
 
     /**
-     *
      * A Node konstruktora.
      *
      * @param id a csomópont egyedi azonosítója
      * @param code a csomópont kódja
      * @param name a csomópont neve
-     * @param lowerIndexes a csomópont által érintett kockabéli intervallumok
-     * alsó indexeinek vektora
-     * @param upperIndexes a csomópont által érintett kockabéli intervallumok
-     * felső indexeinek vektora
+     * @param lowerIndexes a csomópont által érintett kockabéli intervallumok alsó indexeinek vektora
+     * @param upperIndexes a csomópont által érintett kockabéli intervallumok felső indexeinek vektora
      * @param parentId a csomópont szülöjének azonosítója
      * @param childrenId a csomópont gyerekeinek azonosítóit tartalmazó vektor
      */
@@ -102,19 +89,13 @@ public class Node implements java.io.Serializable {
      * @return igyaz ha levélelem, különben hamis
      */
     public boolean isLeaf() {
-        return (this.childrenId == null || this.childrenId.length == 0);
+        return (childrenId == null || childrenId.length == 0);
     }
 
-
-    /**
-     * A csomopont által érintett intervallumok alsó és felső értékeinek
-     * kiíratása.
-     */
-    public void printIntervals() {
-        System.out.println("intervalsLowerIndexes.length: " + intervalsLowerIndexes.length);
-        for (int i = 0; i < this.intervalsLowerIndexes.length; i++) {
-            System.out.print(this.intervalsLowerIndexes[i] + " - ");
-            System.out.println(this.intervalsUpperIndexes[i]);
-        }
+    @Serial
+    private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+        ois.defaultReadObject();
+        this.dataAsString = "{\"id\":\"" + id + "\",\"knownId\":\"" + code + "\",\"name\":\"" + name + "\"}";
     }
+
 }

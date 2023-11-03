@@ -1,17 +1,9 @@
 package hu.agnos.cube.measure;
 
+import lombok.*;
+
 import java.io.Serial;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-
-/**
- *
- * @author parisek
- */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,20 +14,16 @@ public class Cells implements java.io.Serializable {
     @Serial
     private static final long serialVersionUID = -8940196742313994740L;
 
-    /**
-     * A tartalmazott mutatok tömbje. Első index a mutató sorszáma, a második
-     * a mutatón belüli sorszám.
-     */
-    float[][] cells;
+    private float[][] cells; // Values in the cube; first index is the index of the value, second is the row-index
 
     /**
-     * A Cells konstruktora
+     * Constructs the cells
      *
-     * @param columnCnt a mutatók száma
-     * @param rowCnt a mutatók sorainak száma
+     * @param columnCount number of the values
+     * @param rowCount number of rows in the cube
      */
-    public Cells(int columnCnt, int rowCnt) {
-        this.cells = new float[columnCnt][rowCnt];
+    public Cells(int columnCount, int rowCount) {
+        this.cells = new float[columnCount][rowCount];
     }
 
     /**
@@ -46,7 +34,7 @@ public class Cells implements java.io.Serializable {
      * @return a kért mutató érték
      */
     public float getCell(int rowIdx, int columnIdx) {
-        return this.cells[columnIdx][rowIdx];
+        return cells[columnIdx][rowIdx];
     }
 
     /**
@@ -56,7 +44,7 @@ public class Cells implements java.io.Serializable {
      * @return a kért mutató
      */
     public float[] getColumn(int columnIdx) {
-        return this.cells[columnIdx];
+        return cells[columnIdx];
     }
 
     /**
@@ -67,7 +55,7 @@ public class Cells implements java.io.Serializable {
      * @param value a beállítandó érték
      */
     public void setCell(int rowIdx, int columnIdx, float value) {
-        this.cells[columnIdx][rowIdx] = value;
+        cells[columnIdx][rowIdx] = value;
     }
 
     /**
@@ -77,7 +65,7 @@ public class Cells implements java.io.Serializable {
      * @param values a beállítandó mutató
      */
     public void setColumn(int columnIdx, float[] values) {
-        this.cells[columnIdx] = values;
+        cells[columnIdx] = values;
     }
 
 }

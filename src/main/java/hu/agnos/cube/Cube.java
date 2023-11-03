@@ -1,24 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Collection of data classes to describe an Agnos Cube, including all metadata and the data itself. Allows writing and
+ * reading a cube from a file, using the object serialization of Java.
  */
 package hu.agnos.cube;
 
 import hu.agnos.cube.dimension.Dimension;
 import hu.agnos.cube.measure.Cells;
 import hu.agnos.cube.measure.Measures;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
- *
- * @author parisek
+ * Collection of data classes to describe an Agnos Cube, including all metadata and the data itself.
+ * Allows writing and reading a cube from a file, using the object serialization of Java.
  */
 @Getter
 @Setter
@@ -35,20 +34,16 @@ public class Cube implements java.io.Serializable {
     private Cells cells;
     private Date createdDate;
 
-    /**
-     * A kocka konstruktora.
-     * @param name a kocka neve
-     */
     public Cube(String name) {
         this.name = name;
-        this.dimensions = new ArrayList<>();
+        this.dimensions = new ArrayList<>(6);
         this.createdDate = new Date();
     }
 
     public void init() {
         refreshDimensionHeader();
         refreshMeasureHeader();
-        dimensions.forEach(d -> d.getNode(0,0));
+//        dimensions.forEach(d -> d.getNode(0,0));
         dimensions.forEach(Dimension::initLookupTable);
     }
 
@@ -56,7 +51,7 @@ public class Cube implements java.io.Serializable {
         int dimensionNumber = dimensions.size();
         this.dimensionHeader = new String[dimensionNumber];
         for (int i = 0; i < dimensionNumber; i++) {
-            this.dimensionHeader[i] = dimensions.get(i).getName();
+            dimensionHeader[i] = dimensions.get(i).getName();
         }
     }
 
@@ -65,14 +60,16 @@ public class Cube implements java.io.Serializable {
     }
 
     /**
-     * Beszúr egy dimenziót a dimenziók listájába
+     * Inserts a new dimension in the order list of dimensions. The element
+     * in that position, and all elements right of it will be shifted right by
+     * 1 position
      *
-     * @param idx az új dimenzió listabéli indexe
-     * @param dimension a beszúrandó dimenzió
+     * @param idx Position of the new dimension to insert to
+     * @param dimension Dimension to insert
      * @see hu.agnos.cube.dimension.Dimension
      */
     public void addDimension(int idx, Dimension dimension) {
-        this.dimensions.add(idx, dimension);
+        dimensions.add(idx, dimension);
     }
 
 }

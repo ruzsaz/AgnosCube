@@ -3,11 +3,12 @@ package hu.agnos.cube.measure;
 import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
+
 import lombok.Getter;
 
 /**
- * Measures a cube osztályban szereplő mutatók metaadatainak tára, amely egy
- * speciális dimenziónak tekinthető, szokás még tény-dimenziónak is nevezni.
+ * Measures a cube osztályban szereplő mutatók metaadatainak tára, amely egy speciális dimenziónak tekinthető, szokás
+ * még tény-dimenziónak is nevezni.
  *
  * @author parisek
  */
@@ -19,7 +20,7 @@ public class Measures implements java.io.Serializable {
     private final List<AbstractMeasure> measures;
 
     public Measures() {
-        this.measures = new ArrayList<>();
+        this.measures = new ArrayList<>(6);
     }
 
     /**
@@ -28,7 +29,7 @@ public class Measures implements java.io.Serializable {
      * @param member a hozzáadandó mutató
      */
     public void addMember(AbstractMeasure member) {
-        this.measures.add(member);
+        measures.add(member);
     }
 
     /**
@@ -39,7 +40,7 @@ public class Measures implements java.io.Serializable {
      */
     public int getRealMeasureIdxByName(String name) {
         int i = 0;
-        for (AbstractMeasure member : this.measures) {
+        for (AbstractMeasure member : measures) {
             if (member.getName().equals(name)) {
                 return i;
             }
@@ -57,8 +58,8 @@ public class Measures implements java.io.Serializable {
      */
     public int getRealMeasureCount() {
         int result = 0;
-        for (AbstractMeasure m : this.measures) {
-            if (m instanceof Measure) {
+        for (AbstractMeasure abstractMeasure : measures) {
+            if (abstractMeasure instanceof Measure) {
                 result++;
             }
         }
@@ -71,20 +72,19 @@ public class Measures implements java.io.Serializable {
      * @param element Az eltávolítandó mutató
      */
     public void removeMeasure(AbstractMeasure element) {
-        this.measures.remove(element);
+        measures.remove(element);
     }
 
     /**
-     * Visszadadja minden mutató (a kalkulált mutatókat is) egyedi nevét egy
-     * String vektorban (a sorrend kötött)
+     * Visszadadja minden mutató (a kalkulált mutatókat is) egyedi nevét egy String vektorban (a sorrend kötött)
      *
-     * @return A measure-ök egyedi nevét tartalmazó tömb (a calculated
-     * measure-öket is beleértve)
+     * @return A measure-ök egyedi nevét tartalmazó tömb (a calculated measure-öket is beleértve)
      */
     public String[] getHeader() {
-        String[] result = new String[this.measures.size()];
-        for (int i = 0; i < this.measures.size(); i++) {
-            result[i] = this.measures.get(i).getName();
+        int measuresSize = measures.size();
+        String[] result = new String[measuresSize];
+        for (int i = 0; i < measuresSize; i++) {
+            result[i] = measures.get(i).getName();
         }
         return result;
     }
@@ -95,18 +95,19 @@ public class Measures implements java.io.Serializable {
      * @return A tartalmazott mutatók neve
      */
     public String printMembers() {
-        String result = "Measure{";
-        for (AbstractMeasure member : this.measures) {
-            result += member.toString() + ",";
+        StringBuilder result = new StringBuilder("Measure{");
+        for (AbstractMeasure member : measures) {
+            result.append(member.toString()).append(",");
         }
-        if (result.endsWith(",")) {
-            result = result.substring(0, result.length() - 1);
+        if (result.toString().endsWith(",")) {
+            result = new StringBuilder(result.substring(0, result.length() - 1));
         }
-        return result + '}';
+        return result.toString() + '}';
     }
 
     @Override
     public String toString() {
         return printMembers();
     }
+
 }

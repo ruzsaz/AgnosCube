@@ -74,4 +74,14 @@ public class Cube implements java.io.Serializable {
         dimensions.add(idx, dimension);
     }
 
+    public Dimension getDimensionByName(String dimensionName){
+        Dimension result = null;
+        for(Dimension d : this.dimensions){
+            if(d.getName().equals(dimensionName)){
+                result = d;
+                break;
+            }
+        }
+        return result;
+    }
 }

@@ -26,12 +26,22 @@ public class Measures implements java.io.Serializable {
     /**
      * Egy mutató metájának hozzáadása
      *
-     * @param member a hozzáadandó mutató
+     * @param measure a hozzáadandó mutató
      */
-    public void addMember(AbstractMeasure member) {
-        measures.add(member);
+    public void addMeasure(AbstractMeasure measure) {
+        measures.add(measure);
     }
 
+    public AbstractMeasure getMeasureByName(String measureName){
+        AbstractMeasure result = null;
+        for(AbstractMeasure m : this.measures){
+            if(m.getName().equals(measureName)){
+                result = m;
+                break;
+            }
+        }
+        return result;
+    }
     /**
      * Determines the index of a non-calculated measure within the cells.
      *
@@ -69,10 +79,10 @@ public class Measures implements java.io.Serializable {
     /**
      * Egy mutató metájának eltávolitása
      *
-     * @param element Az eltávolítandó mutató
+     * @param measur Az eltávolítandó mutató
      */
-    public void removeMeasure(AbstractMeasure element) {
-        measures.remove(element);
+    public void removeMeasure(AbstractMeasure measur) {
+        measures.remove(measur);
     }
 
     /**

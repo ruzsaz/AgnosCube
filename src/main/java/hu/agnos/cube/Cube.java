@@ -5,6 +5,7 @@
 package hu.agnos.cube;
 
 import hu.agnos.cube.dimension.Dimension;
+import hu.agnos.cube.extraCalculation.PostCalculation;
 import hu.agnos.cube.measure.Cells;
 import hu.agnos.cube.measure.Measures;
 import lombok.Getter;
@@ -33,6 +34,7 @@ public class Cube implements java.io.Serializable {
     private String[] measureHeader;
     private Cells cells;
     private Date createdDate;
+    private List<PostCalculation> postCalculations;
 
     public Cube(String name) {
         this.name = name;

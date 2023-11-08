@@ -38,8 +38,9 @@ public class Cube implements java.io.Serializable {
 
     public Cube(String name) {
         this.name = name;
-        this.dimensions = new ArrayList<>(6);
+        this.dimensions = new ArrayList<>();
         this.createdDate = new Date();
+        this.postCalculations = new ArrayList<>();
     }
 
     public void init() {

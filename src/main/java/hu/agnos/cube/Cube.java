@@ -6,8 +6,9 @@ package hu.agnos.cube;
 
 import hu.agnos.cube.dimension.Dimension;
 import hu.agnos.cube.extraCalculation.PostCalculation;
+import hu.agnos.cube.measure.AbstractMeasure;
 import hu.agnos.cube.measure.Cells;
-import hu.agnos.cube.measure.Measures;
+import hu.agnos.cube.measure.Measure;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,8 +18,9 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Collection of data classes to describe an Agnos Cube, including all metadata and the data itself.
- * Allows writing and reading a cube from a file, using the object serialization of Java.
+ * Collection of data classes to describe an Agnos Cube, including all metadata
+ * and the data itself. Allows writing and reading a cube from a file, using the
+ * object serialization of Java.
  */
 @Getter
 @Setter
@@ -30,7 +32,8 @@ public class Cube implements java.io.Serializable {
     private final String name;
     private final List<Dimension> dimensions;
     private String[] dimensionHeader;
-    private Measures measures;
+    private final List<AbstractMeasure> measures;
+
     private String[] measureHeader;
     private Cells cells;
     private Date createdDate;
@@ -38,9 +41,10 @@ public class Cube implements java.io.Serializable {
 
     public Cube(String name) {
         this.name = name;
-        this.dimensions = new ArrayList<>();
+        this.dimensions = new ArrayList<>(6);
+        this.measures = new ArrayList<>(6);
         this.createdDate = new Date();
-        this.postCalculations = new ArrayList<>();
+        this.postCalculations = new ArrayList<>(1);
     }
 
     public void init() {
@@ -59,13 +63,18 @@ public class Cube implements java.io.Serializable {
     }
 
     private void refreshMeasureHeader() {
-        this.measureHeader = measures.getHeader();
+        int measuresSize = measures.size();
+        this.measureHeader = new String[measuresSize];
+        for (int i = 0; i < measuresSize; i++) {
+            this.measureHeader[i] = measures.get(i).getName();
+        }
+
     }
 
     /**
-     * Inserts a new dimension in the order list of dimensions. The element
-     * in that position, and all elements right of it will be shifted right by
-     * 1 position
+     * Inserts a new dimension in the order list of dimensions. The element in
+     * that position, and all elements right of it will be shifted right by 1
+     * position
      *
      * @param idx Position of the new dimension to insert to
      * @param dimension Dimension to insert
@@ -75,14 +84,78 @@ public class Cube implements java.io.Serializable {
         dimensions.add(idx, dimension);
     }
 
-    public Dimension getDimensionByName(String dimensionName){
+    public Dimension getDimensionByName(String dimensionName) {
         Dimension result = null;
-        for(Dimension d : this.dimensions){
-            if(d.getName().equals(dimensionName)){
+        for (Dimension d : this.dimensions) {
+            if (d.getName().equals(dimensionName)) {
                 result = d;
                 break;
             }
         }
         return result;
     }
+
+    /**
+     * Egy mutató metájának hozzáadása
+     *
+     * @param measure a hozzáadandó mutató
+     */
+    public void addMeasure(AbstractMeasure measure) {
+        measures.add(measure);
+    }
+
+    public AbstractMeasure getMeasureByName(String measureName) {
+        AbstractMeasure result = null;
+        for (AbstractMeasure m : this.measures) {
+            if (m.getName().equals(measureName)) {
+                result = m;
+                break;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Determines the index of a non-calculated measure within the cells.
+     *
+     * @param name Name of the measure
+     * @return Index of the measure within the cells
+     */
+    public int getRealMeasureIdxByName(String name) {
+        int i = 0;
+        for (AbstractMeasure member : measures) {
+            if (member.getName().equals(name)) {
+                return i;
+            }
+            if (!member.isCalculatedMember()) {
+                i++;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Megadja a nem kalkulált measure-ök darabszámát
+     *
+     * @return nem kalkulált measure-ök darabszáma
+     */
+    public int getRealMeasureCount() {
+        int result = 0;
+        for (AbstractMeasure abstractMeasure : measures) {
+            if (abstractMeasure instanceof Measure) {
+                result++;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Egy mutató metájának eltávolitása
+     *
+     * @param measur Az eltávolítandó mutató
+     */
+    public void removeMeasure(AbstractMeasure measur) {
+        measures.remove(measur);
+    }
+
 }

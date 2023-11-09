@@ -16,6 +16,7 @@ import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import lombok.ToString;
 
 /**
  * Collection of data classes to describe an Agnos Cube, including all metadata
@@ -24,6 +25,7 @@ import java.util.List;
  */
 @Getter
 @Setter
+@ToString
 public class Cube implements java.io.Serializable {
 
     @Serial
@@ -50,7 +52,6 @@ public class Cube implements java.io.Serializable {
     public void init() {
         refreshDimensionHeader();
         refreshMeasureHeader();
-//        dimensions.forEach(d -> d.getNode(0,0));
         dimensions.forEach(Dimension::initLookupTable);
     }
 

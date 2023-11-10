@@ -67,7 +67,7 @@ public class Cube implements java.io.Serializable {
         int measuresSize = measures.size();
         this.measureHeader = new String[measuresSize];
         for (int i = 0; i < measuresSize; i++) {
-            this.measureHeader[i] = measures.get(i).getName();
+            measureHeader[i] = measures.get(i).getName();
         }
 
     }
@@ -87,9 +87,9 @@ public class Cube implements java.io.Serializable {
 
     public Dimension getDimensionByName(String dimensionName) {
         Dimension result = null;
-        for (Dimension d : this.dimensions) {
-            if (d.getName().equals(dimensionName)) {
-                result = d;
+        for (Dimension dimension : dimensions) {
+            if (dimension.getName().equals(dimensionName)) {
+                result = dimension;
                 break;
             }
         }
@@ -107,9 +107,9 @@ public class Cube implements java.io.Serializable {
 
     public AbstractMeasure getMeasureByName(String measureName) {
         AbstractMeasure result = null;
-        for (AbstractMeasure m : this.measures) {
-            if (m.getName().equals(measureName)) {
-                result = m;
+        for (AbstractMeasure measure : this.measures) {
+            if (measure.getName().equals(measureName)) {
+                result = measure;
                 break;
             }
         }
@@ -119,13 +119,13 @@ public class Cube implements java.io.Serializable {
     /**
      * Determines the index of a non-calculated measure within the cells.
      *
-     * @param name Name of the measure
+     * @param measureName Name of the measure
      * @return Index of the measure within the cells
      */
-    public int getRealMeasureIdxByName(String name) {
+    public int getRealMeasureIdxByName(String measureName) {
         int i = 0;
         for (AbstractMeasure member : measures) {
-            if (member.getName().equals(name)) {
+            if (member.getName().equals(measureName)) {
                 return i;
             }
             if (!member.isCalculatedMember()) {
@@ -153,10 +153,10 @@ public class Cube implements java.io.Serializable {
     /**
      * Egy mutató metájának eltávolitása
      *
-     * @param measur Az eltávolítandó mutató
+     * @param measure Az eltávolítandó mutató
      */
-    public void removeMeasure(AbstractMeasure measur) {
-        measures.remove(measur);
+    public void removeMeasure(AbstractMeasure measure) {
+        measures.remove(measure);
     }
 
 }

@@ -6,7 +6,6 @@ package hu.agnos.cube;
 
 import hu.agnos.cube.dimension.Dimension;
 import hu.agnos.cube.extraCalculation.PostCalculation;
-import hu.agnos.cube.measure.AbstractMeasure;
 import hu.agnos.cube.measure.Cells;
 import hu.agnos.cube.measure.Measure;
 import lombok.Getter;
@@ -17,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import lombok.ToString;
+import hu.agnos.cube.measure.AbstractMeasure;
 
 /**
  * Collection of data classes to describe an Agnos Cube, including all metadata
@@ -128,7 +128,7 @@ public class Cube implements java.io.Serializable {
             if (member.getName().equals(measureName)) {
                 return i;
             }
-            if (!member.isCalculatedMember()) {
+            if (!member.isCalculated()) {
                 i++;
             }
         }

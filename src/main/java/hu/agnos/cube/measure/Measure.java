@@ -19,7 +19,12 @@ public class Measure implements java.io.Serializable, AbstractMeasure {
     private String name;
 
     @Override
-    public boolean isCalculatedMember() {
+    public boolean isCalculated() {
+        return false;
+    }
+
+    @Override
+    public boolean isVirtual() {
         return false;
     }
 

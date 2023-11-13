@@ -168,6 +168,18 @@ public class Dimension implements java.io.Serializable {
         return result;
     }
 
+    
+    public Level getLevel(String levelName) {
+        Level result = null;
+        for (Level level : levels) {
+            if (level.getName().equals(levelName)) {
+                result = level;
+                break;
+            }
+        }
+        return result;
+    }
+
     /**
      * Visszaadja a megcímzett csomópontot. A címzés a hierarchiaindex és egy "baseVector" szegmenssel történik.
      *

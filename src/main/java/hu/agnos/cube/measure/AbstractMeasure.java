@@ -20,6 +20,8 @@ public interface AbstractMeasure {
      *
      * @return true ha a mutató kalkulált, ellenben false
      */
-    boolean isCalculatedMember();
+    boolean isCalculated();
+    
+    boolean isVirtual();
 
 }

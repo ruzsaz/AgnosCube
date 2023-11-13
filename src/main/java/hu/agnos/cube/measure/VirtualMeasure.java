@@ -9,29 +9,23 @@ import java.io.Serial;
 
 @Getter
 @Setter
-@ToString
 @AllArgsConstructor
-public class CalculatedMeasure implements java.io.Serializable, AbstractMeasure {
+@ToString
+public class VirtualMeasure implements java.io.Serializable, AbstractMeasure {
 
     @Serial
     private static final long serialVersionUID = -8940196742313994740L;
 
     private String name;
 
-    /**
-     * Formula in postfix format to calculate the measure. Should contain only other measures and mathematical operands,
-     * like "VALUE UNIT_VALUE VOLUME * -"
-     **/
-    private String formula;
-
     @Override
     public boolean isCalculated() {
-        return true;
+        return false;
     }
 
-     @Override
+    @Override
     public boolean isVirtual() {
-        return false;
+        return true;
     }
 
 }

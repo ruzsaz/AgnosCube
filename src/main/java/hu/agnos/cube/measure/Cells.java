@@ -1,8 +1,13 @@
 package hu.agnos.cube.measure;
 
-import lombok.*;
 
 import java.io.Serial;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter

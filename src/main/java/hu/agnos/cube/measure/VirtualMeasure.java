@@ -19,9 +19,7 @@ public class VirtualMeasure implements java.io.Serializable, AbstractMeasure {
     private String name;
 
     private String dimensionName;
-    
-    private String levelName;
-    
+
     private String type; 
             
     @Override

@@ -7,6 +7,8 @@ import lombok.ToString;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serial;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Ez az osztály egy Level osztály adott csomopontját reprezentálja. Nem konkrét értékeket, hanem metaadatokat és az
@@ -96,6 +98,16 @@ public class Node implements java.io.Serializable {
     private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
         ois.defaultReadObject();
         this.dataAsString = "{\"id\":\"" + id + "\",\"knownId\":\"" + code + "\",\"name\":\"" + name + "\"}";
+    }
+
+    public List<Integer> kecskeGida() {
+        List<Integer> collector = new ArrayList<>();
+        for (int index = 0; index < intervalsLowerIndexes.length; index++) {
+            for (int i = intervalsLowerIndexes[index]; i < intervalsUpperIndexes[index] + 1; i++) {
+                collector.add(i);
+            }
+        }
+        return collector;
     }
 
 }

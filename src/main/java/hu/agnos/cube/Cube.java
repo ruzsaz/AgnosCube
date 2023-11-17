@@ -5,6 +5,7 @@
 package hu.agnos.cube;
 
 import hu.agnos.cube.dimension.Dimension;
+import hu.agnos.cube.dimension.Node;
 import hu.agnos.cube.extraCalculation.PostCalculation;
 import hu.agnos.cube.measure.Cells;
 import hu.agnos.cube.measure.Measure;
@@ -41,6 +42,8 @@ public class Cube implements java.io.Serializable {
     private Date createdDate;
     private List<PostCalculation> postCalculations;
 
+    private transient int[] kecske;
+
     public Cube(String name) {
         this.name = name;
         this.dimensions = new ArrayList<>(6);
@@ -49,10 +52,25 @@ public class Cube implements java.io.Serializable {
         this.postCalculations = new ArrayList<>(1);
     }
 
+    private void lefreshKecske() {
+        System.out.println("kecske!!!");
+        kecske = new int[2000000];
+        Dimension kecskeDim = dimensions.get(dimensions.size() - 1);
+        Node[] gidak = kecskeDim.getNodes()[1];
+        for (int i = 0; i < gidak.length; i++) {
+            for (Integer mek : gidak[i].kecskeGida()) {
+                kecske[mek] = gidak[i].getId();
+            }
+        }
+    }
+
     public void init() {
         refreshDimensionHeader();
         refreshMeasureHeader();
         dimensions.forEach(Dimension::initLookupTable);
+        if (this.name.startsWith("CRC_NEW")) {
+            lefreshKecske();
+        }
     }
 
     private void refreshDimensionHeader() {

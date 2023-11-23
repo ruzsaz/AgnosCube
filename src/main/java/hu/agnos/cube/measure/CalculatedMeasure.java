@@ -17,6 +17,8 @@ public class CalculatedMeasure implements java.io.Serializable, AbstractMeasure 
     private static final long serialVersionUID = -8940196742313994740L;
 
     private String name;
+    
+    private String type;
 
     /**
      * Formula in postfix format to calculate the measure. Should contain only other measures and mathematical operands,

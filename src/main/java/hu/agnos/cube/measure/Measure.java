@@ -17,6 +17,8 @@ public class Measure implements java.io.Serializable, AbstractMeasure {
     private static final long serialVersionUID = -8940196742313994740L;
 
     private String name;
+    
+    private String type;
 
     @Override
     public boolean isCalculated() {

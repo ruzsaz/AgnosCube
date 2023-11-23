@@ -7,7 +7,6 @@ package hu.agnos.cube;
 import hu.agnos.cube.dimension.Dimension;
 import hu.agnos.cube.dimension.Node;
 import hu.agnos.cube.extraCalculation.PostCalculation;
-import hu.agnos.cube.measure.Cells;
 import hu.agnos.cube.measure.Measure;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,22 +26,25 @@ import hu.agnos.cube.measure.AbstractMeasure;
 @Getter
 @Setter
 @ToString
-public class Cube implements java.io.Serializable {
+public abstract class Cube implements java.io.Serializable {
 
     @Serial
     private static final long serialVersionUID = -8940196742313994740L;
 
+   
     private final String name;
     private final List<Dimension> dimensions;
     private String[] dimensionHeader;
     private final List<AbstractMeasure> measures;
-
     private String[] measureHeader;
-    private Cells cells;
     private Date createdDate;
     private List<PostCalculation> postCalculations;
 
     private transient int[] kecske;
+
+    public abstract String getType() ;
+
+
 
     public Cube(String name) {
         this.name = name;

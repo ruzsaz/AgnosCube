@@ -14,6 +14,9 @@ public interface AbstractMeasure {
      * @return a mutató egyedi neve
      */
     String getName();
+    
+    String getType();; 
+
 
     /**
      * Megadja, hogy a mutató kalkulált vagy ténylegesen tárolt mutató-e

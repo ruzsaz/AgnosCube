@@ -18,18 +18,28 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class CubeClassical extends Cube implements java.io.Serializable {
+public class CountDistinctCube extends Cube implements java.io.Serializable {
 
     @Serial
     private static final long serialVersionUID = -8940196742313994740L;
 
-    private final String type;
+    private String type;
 
-    private float[][] cells; // Values in the cube; first index is the index of the value, second is the row-index
+    private int[][] cells; // Values in the cube; first index is the index of the value, second is the row-index
 
-    public CubeClassical(String name, String type) {
+    public CountDistinctCube(String name, String type) {
         super(name);
-        this.type= type;
+        this.type = type;
     }
 
+    public void printCells() {
+//        for (int j = 0; j < cells[0].length; j++) {
+//            for (float[] doubles : cells) {
+//                System.out.print("\t" + doubles[j]);
+//            }
+//            System.out.println();
+//        }
+//    }
+        System.out.println("majd meg tudod...");
+    }
 }

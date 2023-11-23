@@ -33,13 +33,18 @@ public class CountDistinctCube extends Cube implements java.io.Serializable {
     }
 
     public void printCells() {
-//        for (int j = 0; j < cells[0].length; j++) {
-//            for (float[] doubles : cells) {
-//                System.out.print("\t" + doubles[j]);
-//            }
-//            System.out.println();
-//        }
-//    }
-        System.out.println("majd meg tudod...");
+        for (int i = 0; i < Math.min(cells.length, 50); i++) {
+            for (int id : cells[i]) {
+                System.out.print("\t" + id);
+            }
+            System.out.println();
+        }
+
+        int cellNumber = 0;
+        for (int i = 0; i < cells.length; i++) {
+            cellNumber += cells[i].length;
+        }
+
+        System.out.println("... total " + cells.length + " rows, " + cellNumber + " values.");
     }
 }

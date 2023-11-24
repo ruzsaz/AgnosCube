@@ -27,9 +27,20 @@ public class CountDistinctCube extends Cube implements java.io.Serializable {
 
     private int[][] cells; // Values in the cube; first index is the index of the value, second is the row-index
 
+    private transient int maxCountDistinctElement;
+
     public CountDistinctCube(String name, String type) {
         super(name);
         this.type = type;
+    }
+
+    public void extraInit() {
+        maxCountDistinctElement = 0;
+        for (int[] cell : cells) {
+            for (int element : cell) {
+                maxCountDistinctElement = Math.max(maxCountDistinctElement, element);
+            }
+        }
     }
 
     public void printCells() {
@@ -41,8 +52,8 @@ public class CountDistinctCube extends Cube implements java.io.Serializable {
         }
 
         int cellNumber = 0;
-        for (int i = 0; i < cells.length; i++) {
-            cellNumber += cells[i].length;
+        for (int[] cell : cells) {
+            cellNumber += cell.length;
         }
 
         System.out.println("... total " + cells.length + " rows, " + cellNumber + " values.");

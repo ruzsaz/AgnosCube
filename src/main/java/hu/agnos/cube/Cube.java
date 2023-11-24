@@ -31,7 +31,6 @@ public abstract class Cube implements java.io.Serializable {
     @Serial
     private static final long serialVersionUID = -8940196742313994740L;
 
-   
     private final String name;
     private final List<Dimension> dimensions;
     private String[] dimensionHeader;
@@ -40,12 +39,11 @@ public abstract class Cube implements java.io.Serializable {
     private Date createdDate;
     private List<PostCalculation> postCalculations;
 
-//    private transient int[] kecske;
-
     public abstract String getType() ;
 
     public abstract void printCells();
 
+    public void extraInit() {};
 
     public Cube(String name) {
         this.name = name;
@@ -55,25 +53,11 @@ public abstract class Cube implements java.io.Serializable {
         this.postCalculations = new ArrayList<>(1);
     }
 
-//    private void lefreshKecske() {
-//        System.out.println("kecske!!!");
-//        kecske = new int[2000000];
-//        Dimension kecskeDim = dimensions.get(dimensions.size() - 1);
-//        Node[] gidak = kecskeDim.getNodes()[1];
-//        for (int i = 0; i < gidak.length; i++) {
-//            for (Integer mek : gidak[i].kecskeGida()) {
-//                kecske[mek] = gidak[i].getId();
-//            }
-//        }
-//    }
-
     public void init() {
         refreshDimensionHeader();
         refreshMeasureHeader();
         dimensions.forEach(Dimension::initLookupTable);
-//        if (this.name.startsWith("CRC_NEW")) {
-//            lefreshKecske();
-//        }
+        extraInit();
     }
 
     private void refreshDimensionHeader() {

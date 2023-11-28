@@ -6,9 +6,13 @@ package hu.agnos.cube;
 
 import lombok.Getter;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serial;
 import lombok.Setter;
 import lombok.ToString;
+
+import hu.agnos.cube.dimension.Dimension;
 
 /**
  * Collection of data classes to describe an Agnos Cube, including all metadata
@@ -34,7 +38,7 @@ public class CountDistinctCube extends Cube implements java.io.Serializable {
         this.type = type;
     }
 
-    public void extraInit() {
+    public void initCountDistinctCube() {
         maxCountDistinctElement = 0;
         for (int[] cell : cells) {
             for (int element : cell) {
@@ -58,4 +62,11 @@ public class CountDistinctCube extends Cube implements java.io.Serializable {
 
         System.out.println("... total " + cells.length + " rows, " + cellNumber + " values.");
     }
+
+    @Serial
+    void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+        ois.defaultReadObject();
+        init();
+    }
+
 }

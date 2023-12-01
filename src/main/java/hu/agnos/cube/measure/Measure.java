@@ -9,16 +9,16 @@ import java.io.Serial;
 
 @Getter
 @Setter
+@AllArgsConstructor
 @ToString
-public class Measure extends AbstractMeasure implements java.io.Serializable {
+public class Measure implements java.io.Serializable, AbstractMeasure {
 
     @Serial
     private static final long serialVersionUID = -8940196742313994740L;
 
-    public Measure(String name, String type, boolean hidden) {
-        super(name, type, hidden);
-    }
-
+    private String name;
+    
+    private String type;
 
     @Override
     public boolean isCalculated() {

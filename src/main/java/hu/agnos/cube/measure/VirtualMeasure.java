@@ -9,23 +9,24 @@ import java.io.Serial;
 
 @Getter
 @Setter
+@AllArgsConstructor
 @ToString
-public class VirtualMeasure extends AbstractMeasure implements java.io.Serializable {
+public class VirtualMeasure implements java.io.Serializable, AbstractMeasure {
 
     @Serial
     private static final long serialVersionUID = -8940196742313994740L;
 
-    public VirtualMeasure(String name, String type, boolean hidden) {
-        super(name, type, hidden);
-    }
+    private String name;
 
+    private String type; 
+            
     @Override
     public boolean isCalculated() {
         return false;
     }
 
     @Override
-    public boolean isVirtual() {             
+    public boolean isVirtual() {
         return true;
     }
 

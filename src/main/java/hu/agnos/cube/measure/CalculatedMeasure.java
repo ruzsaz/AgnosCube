@@ -10,10 +10,15 @@ import java.io.Serial;
 @Getter
 @Setter
 @ToString
-public class CalculatedMeasure extends AbstractMeasure  implements java.io.Serializable {
+@AllArgsConstructor
+public class CalculatedMeasure implements java.io.Serializable, AbstractMeasure {
 
     @Serial
     private static final long serialVersionUID = -8940196742313994740L;
+
+    private String name;
+    
+    private String type;
 
     /**
      * Formula in postfix format to calculate the measure. Should contain only other measures and mathematical operands,
@@ -21,12 +26,6 @@ public class CalculatedMeasure extends AbstractMeasure  implements java.io.Seria
      **/
     private String formula;
 
-    public CalculatedMeasure(String name, String type, boolean hidden, String formula) {
-        super(name, type, hidden);
-        this.formula=formula;
-    }
-
-    
     @Override
     public boolean isCalculated() {
         return true;

@@ -19,6 +19,7 @@ public class CalculatedMeasure implements java.io.Serializable, AbstractMeasure 
     private String name;
     
     private String type;
+    private boolean hidden;
 
     /**
      * Formula in postfix format to calculate the measure. Should contain only other measures and mathematical operands,

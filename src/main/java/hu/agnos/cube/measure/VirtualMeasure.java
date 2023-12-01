@@ -18,7 +18,8 @@ public class VirtualMeasure implements java.io.Serializable, AbstractMeasure {
 
     private String name;
 
-    private String type; 
+    private String type;
+    private boolean hidden;
             
     @Override
     public boolean isCalculated() {

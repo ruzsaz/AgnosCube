@@ -13,6 +13,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import hu.agnos.cube.dimension.Dimension;
+import hu.agnos.cube.measure.AbstractMeasure;
 
 /**
  * Collection of data classes to describe an Agnos Cube, including all metadata
@@ -48,6 +49,10 @@ public class CountDistinctCube extends Cube implements java.io.Serializable {
     }
 
     public void printCells() {
+        for (AbstractMeasure m : getMeasures()) {
+            System.out.println("Measure: " + m.getName() + ", type: " + m.getType() + ", hidden: " + m.isHidden());
+        }
+
         for (int i = 0; i < Math.min(cells.length, 50); i++) {
             for (int id : cells[i]) {
                 System.out.print("\t" + id);

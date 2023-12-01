@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serial;
 
 @Getter

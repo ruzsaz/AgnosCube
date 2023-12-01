@@ -6,9 +6,13 @@ package hu.agnos.cube;
 
 import lombok.Getter;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serial;
 import lombok.Setter;
 import lombok.ToString;
+
+import hu.agnos.cube.measure.AbstractMeasure;
 
 /**
  * Collection of data classes to describe an Agnos Cube, including all metadata
@@ -33,7 +37,11 @@ public class ClassicalCube extends Cube implements java.io.Serializable {
     }
 
     public void printCells() {
-        for (int j = 0; j < cells[0].length; j++) {
+        for (AbstractMeasure m : getMeasures()) {
+            System.out.println("Measure: " + m.getName() + ", type: " + m.getType() + ", hidden: " + m.isHidden());
+        }
+
+        for (int j = 0; j < Math.min(50, cells[0].length); j++) {
             for (float[] doubles : cells) {
                 System.out.print("\t" + doubles[j]);
             }

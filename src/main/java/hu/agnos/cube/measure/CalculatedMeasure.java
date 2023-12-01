@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serial;
 
 @Getter
@@ -32,7 +34,7 @@ public class CalculatedMeasure implements java.io.Serializable, AbstractMeasure 
         return true;
     }
 
-     @Override
+    @Override
     public boolean isVirtual() {
         return false;
     }

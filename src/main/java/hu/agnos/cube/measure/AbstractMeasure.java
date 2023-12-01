@@ -1,5 +1,9 @@
 package hu.agnos.cube.measure;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serial;
+
 /**
  * Ez az interface a mutatók egységes kezelésére szolgál, szerepe, hogy mind a kalkulált, mind a ténylegesen tárolt
  * mutatókat ugyanúgy kezeljük

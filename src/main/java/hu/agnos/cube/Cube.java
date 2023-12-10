@@ -32,7 +32,7 @@ public abstract class Cube implements java.io.Serializable {
     @Serial
     private static final long serialVersionUID = -8940196742313994740L;
 
-    private final String name;
+    private String name;
     private final List<Dimension> dimensions;
     private final List<AbstractMeasure> measures;
     private String[] dimensionHeader;

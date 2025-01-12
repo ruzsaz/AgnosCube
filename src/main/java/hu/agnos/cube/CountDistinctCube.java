@@ -74,4 +74,15 @@ public class CountDistinctCube extends Cube implements java.io.Serializable {
         init();
     }
 
+    public void dropCells() {
+        setLastAccessTime(Long.MAX_VALUE);
+        setFileSize(0L);
+        cells = null;
+    }
+
+    public int[][] getCells() {
+        setLastAccessTime(System.currentTimeMillis());
+        return cells;
+    }
+
 }

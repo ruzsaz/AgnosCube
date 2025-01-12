@@ -48,4 +48,16 @@ public class ClassicalCube extends Cube implements java.io.Serializable {
             System.out.println();
         }
     }
+
+    public void dropCells() {
+        setLastAccessTime(Long.MAX_VALUE);
+        setFileSize(0L);
+        cells = null;
+    }
+
+    public float[][] getCells() {
+        setLastAccessTime(System.currentTimeMillis());
+        return cells;
+    }
+
 }

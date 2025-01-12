@@ -40,6 +40,8 @@ public abstract class Cube implements java.io.Serializable {
     private Date createdDate;
     private List<PostCalculation> postCalculations;
     private transient String hash;
+    private transient long lastAccessTime;
+    private transient long fileSize;
 
     public Cube(String name) {
         this.name = name;
@@ -48,19 +50,27 @@ public abstract class Cube implements java.io.Serializable {
         this.createdDate = new Date();
         this.postCalculations = new ArrayList<>(1);
         this.hash = "";
+        this.lastAccessTime = System.currentTimeMillis();
+        this.fileSize = 0L;
     }
 
     public abstract String getType();
 
     public abstract void printCells();
 
+    public abstract void dropCells();
+
+    public boolean isDataPresent() {
+        return lastAccessTime != Long.MAX_VALUE;
+    }
+
     void init() {
+        lastAccessTime = System.currentTimeMillis();
         refreshDimensionHeader();
         refreshMeasureHeader();
         dimensions.forEach(Dimension::initLookupTable);
+        lastAccessTime = System.currentTimeMillis();
     }
-
-
 
     private void refreshDimensionHeader() {
         int dimensionNumber = dimensions.size();

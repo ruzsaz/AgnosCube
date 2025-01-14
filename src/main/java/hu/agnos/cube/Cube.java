@@ -10,12 +10,14 @@ import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import hu.agnos.cube.dimension.Dimension;
+import hu.agnos.cube.dimension.Node;
 import hu.agnos.cube.extraCalculation.PostCalculation;
 import hu.agnos.cube.measure.AbstractMeasure;
 import hu.agnos.cube.measure.Measure;
@@ -39,6 +41,7 @@ public abstract class Cube implements java.io.Serializable {
     private String[] measureHeader;
     private Date createdDate;
     private List<PostCalculation> postCalculations;
+    private Map<List<Node>, double[]> cache;
     private transient String hash;
     private transient long lastAccessTime;
     private transient long fileSize;

@@ -21,6 +21,9 @@ import hu.agnos.cube.dimension.Node;
 import hu.agnos.cube.extraCalculation.PostCalculation;
 import hu.agnos.cube.measure.AbstractMeasure;
 import hu.agnos.cube.measure.Measure;
+import hu.agnos.cube.meta.queryDto.CacheKey;
+import hu.agnos.cube.meta.resultDto.CoordinatesDTO;
+import hu.agnos.cube.meta.resultDto.NodeDTO;
 
 /**
  * Collection of data classes to describe an Agnos Cube, including all metadata and the data itself. Allows writing and
@@ -41,7 +44,7 @@ public abstract class Cube implements java.io.Serializable {
     private String[] measureHeader;
     private Date createdDate;
     private List<PostCalculation> postCalculations;
-    private Map<List<Node>, double[]> cache;
+    private Map<CacheKey, double[]> cache;
     private transient String hash;
     private transient long lastAccessTime;
     private transient long fileSize;

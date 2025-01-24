@@ -12,18 +12,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import hu.agnos.cube.dimension.Dimension;
-import hu.agnos.cube.dimension.Node;
 import hu.agnos.cube.extraCalculation.PostCalculation;
 import hu.agnos.cube.measure.AbstractMeasure;
 import hu.agnos.cube.measure.Measure;
 import hu.agnos.cube.meta.queryDto.CacheKey;
-import hu.agnos.cube.meta.resultDto.CoordinatesDTO;
-import hu.agnos.cube.meta.resultDto.NodeDTO;
 
 /**
  * Collection of data classes to describe an Agnos Cube, including all metadata and the data itself. Allows writing and
@@ -44,7 +42,7 @@ public abstract class Cube implements java.io.Serializable {
     private String[] measureHeader;
     private Date createdDate;
     private List<PostCalculation> postCalculations;
-    private Map<CacheKey, double[]> cache;
+
     private transient String hash;
     private transient long lastAccessTime;
     private transient long fileSize;
@@ -65,6 +63,10 @@ public abstract class Cube implements java.io.Serializable {
     public abstract void printCells();
 
     public abstract void dropCells();
+
+    public abstract void putAllToCache(Map<CacheKey, double[]> tmpCache);
+
+    public abstract int getCacheSize();
 
     public boolean isDataPresent() {
         return lastAccessTime != Long.MAX_VALUE;

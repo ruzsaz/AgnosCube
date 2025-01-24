@@ -6,13 +6,15 @@ package hu.agnos.cube;
 
 import lombok.Getter;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.Serial;
+import java.util.HashMap;
+import java.util.Map;
+
 import lombok.Setter;
 import lombok.ToString;
 
 import hu.agnos.cube.measure.AbstractMeasure;
+import hu.agnos.cube.meta.queryDto.CacheKey;
 
 /**
  * Collection of data classes to describe an Agnos Cube, including all metadata
@@ -22,7 +24,7 @@ import hu.agnos.cube.measure.AbstractMeasure;
 @Getter
 @Setter
 @ToString
-public class ClassicalCube extends Cube implements java.io.Serializable {
+public class ClassicalCube extends Cube {
 
     @Serial
     private static final long serialVersionUID = -8940196742313994740L;
@@ -30,6 +32,7 @@ public class ClassicalCube extends Cube implements java.io.Serializable {
     private final String type;
 
     private float[][] cells; // Values in the cube; first index is the index of the value, second is the row-index
+    private Map<CacheKey, double[]> cache;
 
     public ClassicalCube(String name, String type) {
         super(name);
@@ -53,11 +56,21 @@ public class ClassicalCube extends Cube implements java.io.Serializable {
         setLastAccessTime(Long.MAX_VALUE);
         setFileSize(0L);
         cells = null;
+        cache = null;
     }
 
     public float[][] getCells() {
         setLastAccessTime(System.currentTimeMillis());
         return cells;
+    }
+
+    public void putAllToCache(Map<CacheKey, double[]> tmpCache) {
+        this.cache = new HashMap<>(tmpCache.size());
+        cache.putAll(tmpCache);
+    }
+
+    public int getCacheSize() {
+        return (cache == null) ? 0 : cache.size();
     }
 
 }

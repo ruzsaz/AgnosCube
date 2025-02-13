@@ -36,13 +36,17 @@ public class CountDistinctCube extends Cube {
     private int[][] cells; // Values in the cube; first index is the index of the value, second is the row-index
     private TObjectIntHashMap<CacheKey> cache;
 
-    private transient int maxCountDistinctElement;
+    private transient int maxCountDistinctElement;  // The maximum value in the cells - used for sizing the collector array
 
     public CountDistinctCube(String name, String type) {
         super(name);
         this.type = type;
     }
 
+    /**
+     * Initializes the cube for calculations: determines the maximum value in the cells,
+     * used for sizing the collector array.
+     */
     public void initCountDistinctCube() {
         maxCountDistinctElement = 0;
         for (int[] cell : cells) {
@@ -52,6 +56,9 @@ public class CountDistinctCube extends Cube {
         }
     }
 
+    /**
+     * Prints the cells of the cube for debugging purposes.
+     */
     public void printCells() {
         for (AbstractMeasure m : getMeasures()) {
             System.out.println("Measure: " + m.getName() + ", type: " + m.getType() + ", hidden: " + m.isHidden());
@@ -90,8 +97,11 @@ public class CountDistinctCube extends Cube {
         return cells;
     }
 
-    public void putAllToCache(Map<CacheKey, double[]> tmpCache) {
-        this.cache = new TObjectIntHashMap<>(tmpCache.size());
+    @Override
+    public void addAllToCache(Map<CacheKey, double[]> tmpCache) {
+        if (cache == null) {
+            cache = new TObjectIntHashMap<>(tmpCache.size());
+        }
         for (Map.Entry<CacheKey, double[]> entry : tmpCache.entrySet()) {
             CacheKey key = entry.getKey();
             double[] value = entry.getValue();
@@ -101,6 +111,10 @@ public class CountDistinctCube extends Cube {
 
     public int getCacheSize() {
         return (cache == null) ? 0 : cache.size();
+    }
+
+    public boolean isCached(CacheKey key) {
+        return cache.containsKey(key);
     }
 
 }

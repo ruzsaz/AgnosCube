@@ -12,7 +12,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -47,6 +46,11 @@ public abstract class Cube implements java.io.Serializable {
     private transient long lastAccessTime;
     private transient long fileSize;
 
+    /**
+     * Constructor for the Cube class.
+     *
+     * @param name the name of the cube
+     */
     public Cube(String name) {
         this.name = name;
         this.dimensions = new ArrayList<>(6);
@@ -64,9 +68,11 @@ public abstract class Cube implements java.io.Serializable {
 
     public abstract void dropCells();
 
-    public abstract void putAllToCache(Map<CacheKey, double[]> tmpCache);
+    public abstract void addAllToCache(Map<CacheKey, double[]> tmpCache);
 
     public abstract int getCacheSize();
+
+    public abstract boolean isCached(CacheKey key);
 
     public boolean isDataPresent() {
         return lastAccessTime != Long.MAX_VALUE;

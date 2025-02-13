@@ -34,6 +34,12 @@ public class ClassicalCube extends Cube {
     private float[][] cells; // Values in the cube; first index is the index of the value, second is the row-index
     private Map<CacheKey, double[]> cache;
 
+    /**
+     * Constructor for the ClassicalCube class.
+     *
+     * @param name the name of the cube
+     * @param type the type of the cube
+     */
     public ClassicalCube(String name, String type) {
         super(name);
         this.type= type;
@@ -64,13 +70,20 @@ public class ClassicalCube extends Cube {
         return cells;
     }
 
-    public void putAllToCache(Map<CacheKey, double[]> tmpCache) {
-        this.cache = new HashMap<>(tmpCache.size());
+    @Override
+    public void addAllToCache(Map<CacheKey, double[]> tmpCache) {
+        if (cache == null) {
+            cache = new HashMap<>(tmpCache.size());
+        }
         cache.putAll(tmpCache);
     }
 
     public int getCacheSize() {
         return (cache == null) ? 0 : cache.size();
+    }
+
+    public boolean isCached(CacheKey key) {
+        return cache.containsKey(key);
     }
 
 }
